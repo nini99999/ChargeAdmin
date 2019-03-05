@@ -29,7 +29,7 @@ public class WebSecureConfig extends WebSecurityConfigurerAdapter {
                 .anyRequest().authenticated()
                 .and()
                 .formLogin().successHandler(authenticationSuccessHandler()).failureHandler(authenticationFailedHandler())
-                .loginPage("/login")
+                .loginPage("/login").failureUrl("/login?error")
                 .permitAll()
                 .and()
                 .logout().deleteCookies("JSESSIONID").invalidateHttpSession(true)

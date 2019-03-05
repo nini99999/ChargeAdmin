@@ -11,7 +11,5 @@ import java.io.IOException;
 public class AuthenticationFailedHandler extends SimpleUrlAuthenticationFailureHandler {
     @Override
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
-        logger.info(request.getParameter("username"));
-        logger.info(request.getParameter("password"));
     }
 }
