@@ -10,10 +10,8 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 
 @Configuration
@@ -27,7 +25,7 @@ public class WebSecureConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .antMatchers("/", "/home").permitAll()
+                .antMatchers("/", "/home", "/common/**","/dist/**","/bower_components/**","/plugins/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin().successHandler(authenticationSuccessHandler()).failureHandler(authenticationFailedHandler())
@@ -37,18 +35,6 @@ public class WebSecureConfig extends WebSecurityConfigurerAdapter {
                 .logout().deleteCookies("JSESSIONID").invalidateHttpSession(true)
                 .permitAll();
         http.csrf().disable();
-        http.addFilterAt(customAuthenticationFilter(),
-                UsernamePasswordAuthenticationFilter.class);
-    }
-    @Bean
-    CustomAuthenticationFilter customAuthenticationFilter() throws Exception {
-        CustomAuthenticationFilter filter = new CustomAuthenticationFilter();
-        filter.setFilterProcessesUrl("/login/json");
-        filter.setAuthenticationSuccessHandler(authenticationSuccessHandler());
-        filter.setAuthenticationFailureHandler(authenticationFailedHandler());
-        //这句很关键，重用WebSecurityConfigurerAdapter配置的AuthenticationManager，不然要自己组装AuthenticationManager
-        filter.setAuthenticationManager(authenticationManagerBean());
-        return filter;
     }
 
 

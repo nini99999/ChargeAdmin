@@ -4,7 +4,7 @@
   <artifactId>ChargeAdmin</artifactId>
   <version>1.0.0-SNAPSHOT</version>
   <packaging>jar</packaging>
-	<name>bi Maven Webapp</name>
+	<name>ChargeAdmin Maven Webapp</name>
 	<url>http://maven.apache.org</url>
 	<parent>
 		<groupId>org.springframework.boot</groupId>
