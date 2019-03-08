@@ -1,5 +1,6 @@
 package com.poshist.sys.entity;
 
+import com.poshist.common.AbstractEntity;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
@@ -8,7 +9,7 @@ import java.util.List;
 @Entity
 @Table(name = "T_SYS_USER")
 @EntityListeners(AuditingEntityListener.class)
-public class User extends  AbstractEntity {
+public class User extends AbstractEntity {
     private String userName;
     private String password;
     private String status;

@@ -1,5 +1,6 @@
 package com.poshist.sys.entity;
 
+import com.poshist.common.AbstractEntity;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
@@ -7,7 +8,7 @@ import javax.persistence.*;
 @Entity
 @Table(name = "T_SYS_ROLE_FUNCTION")
 @EntityListeners(AuditingEntityListener.class)
-public class RoleFunction extends  AbstractEntity {
+public class RoleFunction extends AbstractEntity {
     @OneToOne
     @JoinColumn(name = "ROLE_ID",referencedColumnName = "id")
     private Role role;

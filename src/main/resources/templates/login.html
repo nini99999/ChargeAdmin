@@ -12,7 +12,14 @@
   <title>花椒大料| 登录</title>
   <!-- Tell the browser to be responsive to screen width -->
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+  <script language="javascript">
+    window.onload=function(){
+      if(self!=top){
+        top.location.href="${ctx}/login";
+      }
 
+    }
+  </script>
 </head>
 <body class="hold-transition login-page">
 <div class="login-box">

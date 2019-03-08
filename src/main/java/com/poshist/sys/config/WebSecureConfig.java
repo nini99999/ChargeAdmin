@@ -23,9 +23,10 @@ public class WebSecureConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+        http.headers().frameOptions().disable();
         http
                 .authorizeRequests()
-                .antMatchers("/", "/home", "/common/**","/dist/**","/bower_components/**","/plugins/**").permitAll()
+                .antMatchers( "/home", "/common/**","/dist/**","/bower_components/**","/plugins/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin().successHandler(authenticationSuccessHandler()).failureHandler(authenticationFailedHandler())

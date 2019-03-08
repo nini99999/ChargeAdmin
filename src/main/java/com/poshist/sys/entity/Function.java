@@ -1,5 +1,6 @@
 package com.poshist.sys.entity;
 
+import com.poshist.common.AbstractEntity;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.Entity;
@@ -9,7 +10,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "T_SYS_FUNCTION")
 @EntityListeners(AuditingEntityListener.class)
-public class Function extends  AbstractEntity {
+public class Function extends AbstractEntity {
 
     private String name;
     private String url;

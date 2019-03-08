@@ -1,4 +1,4 @@
-package com.poshist.sys.entity;
+package com.poshist.common;
 
 
 import org.springframework.data.jpa.domain.AbstractPersistable;
