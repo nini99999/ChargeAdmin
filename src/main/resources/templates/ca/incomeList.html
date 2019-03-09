@@ -4,7 +4,6 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>AdminLTE 2 | Data Tables</title>
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <!-- Bootstrap 3.3.7 -->
@@ -31,64 +30,105 @@
     <!-- Google Font -->
     <link rel="stylesheet"
           href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+    <script>
+        var id;
+        function  isDelIncome(value)
+        {
+            id=value;
+        }
+        function delIncome()
+        {
+            window.location.href="delIncome?id="+id;
+        }
+        function editIncome(value )
+        {
+            window.location.href="editIncomeInit?id="+value;
+        }
+    </script>
+
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
-
-<div class="box">
-    <div class="box-header">
-        <div class="col-md-1" align="middle">
-            <button type="button" class="btn btn-block btn-default " onclick="add();">新增</button>
+    <!-- Main content -->
+    <section class="content">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="box">
+                    <div class="box-header">
+                        <div class="col-md-1" align="middle">
+                            <button type="button" class="btn btn-block btn-default " onclick="add();">新增</button>
+                        </div>
+                    </div>
+                    <!-- /.box-header -->
+                    <div class="box-body">
+                        <table id="incomeTable" class="table table-bordered table-hover">
+                            <thead>
+                            <tr>
+                                <th  rowspan="1" colspan="1" >编号</th>
+                                <th  rowspan="1" colspan="1" >项目</th>
+                                <th  rowspan="1" colspan="1" >附加服务</th>
+                                <th  rowspan="1" colspan="1" >收款平台</th>
+                                <th  rowspan="1" colspan="1" >结款类型</th>
+                                <th  rowspan="1" colspan="1">客户类型</th>
+                                <th  rowspan="1" colspan="1">客户手机号</th>
+                                <th  rowspan="1" colspan="1">金额</th>
+                                <th  rowspan="1" colspan="1">收款时间</th>
+                                <th  rowspan="1" colspan="1">收款员</th>
+                                <th rowspan="1" colspan="1">操作</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="income:${incomeList}">
+                                <td th:text="${income.id}"></td>
+                                <td th:text="${income.itemInfo.name}"></td>
+                                <td th:if="${income.otherService!=null}" th:text="${income.otherService.name}"></td>  <td th:if="${income.otherService==null}" ></td>
+                                <td th:text="${income.incomePlatform.name}"></td>
+                                <td th:text="${income.incomeType.name}"></td>
+                                <td th:text="${income.customType.name}"></td>
+                                <td th:text="${income.customMobile}"></td>
+                                <td th:text="${income.incomeValue}"></td>
+                                <td th:text="${#dates.format(income.operateTime, 'yyyy-MM-dd')}"></td>
+                                <td th:text="${income.operate.realName}"></td>
+                                <td >
+                                    <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#modal-warning"  data-   th:onclick="'javascript:isDelIncome(\''+${income.id}+'\');'" >
+                                        删除
+                                    </button>
+                                    <button type="button" class="btn  btn-primary" th:onclick="'javascript:editIncome(\''+${income.id}+'\');'">修改</button>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- /.box-body -->
+                </div>
+                <!-- /.box -->
+            </div>
+            <!-- /.col -->
         </div>
+        <!-- /.row -->
+    </section>
+    <!-- /.content -->
+    <div class="modal modal-warning fade" id="modal-warning">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">删除确认</h4>
+                </div>
+                <div class="modal-body">
+                    <p>确认删除该条数据吗？</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">关闭</button>
+                    <button type="button" class="btn btn-outline" data-dismiss="modal" onclick="delIncome();">确认</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
     </div>
-    <!-- /.box-header -->
-    <div class="box-body">
-        <div id="income_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">
-            <div class="row"><div class="col-sm-12">
-            <table id="income" class="table table-bordered table-hover dataTable" role="grid" >
-            <thead>
-            <tr role="row">
-                <th  rowspan="1" colspan="1" >项目</th>
-                <th  rowspan="1" colspan="1" >附加服务</th>
-                <th  rowspan="1" colspan="1" >收款平台</th>
-                <th  rowspan="1" colspan="1" >结款类型</th>
-                <th  rowspan="1" colspan="1">客户类型</th>
-                <th  rowspan="1" colspan="1">客户手机号</th>
-                <th  rowspan="1" colspan="1">金额</th>
-                <th  rowspan="1" colspan="1">收款时间</th>
-                <th  rowspan="1" colspan="1">收款员</th>
-                <th rowspan="1" colspan="1">操作</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr role="row" class="odd" th:each="income:${incomeList}">
-                <td th:text="${income.itemInfo.name}"></td>
-                <td th:if="${income.otherService!=null}" th:text="${income.otherService.name}"></td>  <td th:if="${income.otherService==null}" ></td>
-                <td th:text="${income.incomePlatform.name}"></td>
-                <td th:text="${income.incomeType.name}"></td>
-                <td th:text="${income.customType.name}"></td>
-                <td th:text="${income.customMobile}"></td>
-                <td th:text="${income.incomeValue}"></td>
-                <td th:text="${#dates.format(income.operateTime, 'yyyy-MM-dd')}"></td>
-                <td th:text="${income.operate.realName}"></td>
-            </tr>
-            </tbody>
-            <tfoot>
-            <tr >
-                <th  rowspan="1" colspan="1" >项目</th>
-                <th  rowspan="1" colspan="1" >附加服务</th>
-                <th  rowspan="1" colspan="1" >收款平台</th>
-                <th  rowspan="1" colspan="1" >结款类型</th>
-                <th  rowspan="1" colspan="1">客户类型</th>
-                <th  rowspan="1" colspan="1">客户手机号</th>
-                <th  rowspan="1" colspan="1">金额</th>
-                <th  rowspan="1" colspan="1">收款时间</th>
-                <th  rowspan="1" colspan="1">收款员</th>
-                <th rowspan="1" colspan="1">操作</th>
-            </tr>
-            </tfoot>
-        </table></div></div>
-    <!-- /.box-body -->
-</div>
+
+</body>
 <!-- jQuery 3 -->
 <script src="../bower_components/jquery/dist/jquery.min.js"></script>
 <!-- Bootstrap 3.3.7 -->
@@ -106,9 +146,21 @@
 <script src="../dist/js/demo.js"></script>
 <!-- page script -->
 <script>
+
     function add(){
         window.location.href="addIncomeInit";
     }
+    $(function () {
+        $('#incomeTable').DataTable({
+            'paging'      : true,
+            'lengthChange': false,
+            'searching'   : false,
+            'ordering'    : false,
+            'info'        : true,
+            'autoWidth'   : false,
+        })
+    })
+
 </script>
 </body>
 </html>

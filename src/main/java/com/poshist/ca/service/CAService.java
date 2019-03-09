@@ -8,6 +8,7 @@ import com.poshist.ca.repository.IncomeInfoDao;
 import com.poshist.ca.repository.ItemInfoDao;
 import com.poshist.ca.vo.ChargeVO;
 import com.poshist.ca.vo.SelectVO;
+import com.poshist.common.Constant;
 import com.poshist.sys.repository.UserDao;
 import com.poshist.sys.vo.UserVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,11 +32,13 @@ public class CAService {
     private ItemInfoDao itemInfoDao;
     @Autowired
     private UserDao userDao;
-    public Page<IncomeInfo> getIncomeList(){
-        Pageable pageable = new PageRequest(0, 1);
+    public Page<IncomeInfo> getIncomeList(Integer pageNumber){
+        Pageable pageable = new PageRequest(pageNumber-1, Constant.PAGESIZE);
         return incomeInfoDao.getAllByStatusOrderByIdDesc(0,pageable);
     }
-
+    public List<IncomeInfo> getIncomeList(){
+        return incomeInfoDao.getAllByStatusOrderByIdDesc(0);
+    }
     /**
      *  获取字典表
      * @param type
@@ -48,6 +51,9 @@ public class CAService {
      List<ItemInfo> itemList=itemInfoDao.getAllByIdAndStatus(type,0);
 
      return analysisItem(itemList);
+    }
+    public IncomeInfo getIncomeInfo(Long id){
+        return incomeInfoDao.findById(id).get();
     }
     private List<SelectVO> analysisItem(List<ItemInfo> itemList){
          List<SelectVO> list=new ArrayList<SelectVO>();
@@ -106,4 +112,10 @@ public class CAService {
 
         return incomeInfo;
     }
+    public void delIncome(Long id){
+        IncomeInfo incomeInfo=incomeInfoDao.findById(id).get();
+        incomeInfo.setStatus(1);
+        incomeInfoDao.save(incomeInfo);
+    }
+
 }

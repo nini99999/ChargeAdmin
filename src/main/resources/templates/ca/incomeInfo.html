@@ -46,10 +46,10 @@
         <div class="box-body">
             <div class="form-group">
                 <label for="item" class="col-sm-2 control-label">项目</label>
-
+                 <input type="hidden" id="id" name="id" th:value="${incomeInfo.id}"/>
                 <div class="col-sm-10">
-                    <select class="form-control" id="item" name="item">
-                        <option th:each="itemInfo:${itemInfo}" th:value="${itemInfo.value}" th:text="${itemInfo.name}"></option>
+                    <select class="form-control" id="item" name="item"  th:value="${incomeInfo.itemInfo.id}">
+                        <option th:each="itemInfo:${itemInfo}" th:value="${itemInfo.value}" th:text="${itemInfo.name}" th:selected="${itemInfo.value==incomeInfo.itemInfo.id}"></option>
                     </select>
                 </div>
             </div>
@@ -101,7 +101,7 @@
                 <label for="incomeValue" class="col-sm-2 control-label">金额</label>
 
                 <div class="col-sm-10">
-                    <input type="text" class="form-control"  id="incomeValue" name="incomeValue" value="0.0">
+                    <input type="text" class="form-control"  id="incomeValue" name="incomeValue" th:value="${incomeInfo.incomeValue}">
                 </div>
             </div>
             <div class="form-group">
