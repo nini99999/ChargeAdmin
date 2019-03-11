@@ -42,14 +42,14 @@
     </div>
     <!-- /.box-header -->
     <!-- form start -->
-    <form class="form-horizontal" th:action="@{addIncome}" method="post">
-        <div class="box-body">
+    <form  class="form-horizontal" th:action="@{addIncome}" method="post" id="thisform">
+    <div class="box-body">
             <div class="form-group">
                 <label for="item" class="col-sm-2 control-label">项目</label>
-                 <input type="hidden" id="id" name="id" th:value="${incomeInfo.id}"/>
+                 <input type="hidden" id="incomeID" name="id" th:value="${chargeVO.id}"/>
                 <div class="col-sm-10">
-                    <select class="form-control" id="item" name="item"  th:value="${incomeInfo.itemInfo.id}">
-                        <option th:each="itemInfo:${itemInfo}" th:value="${itemInfo.value}" th:text="${itemInfo.name}" th:selected="${itemInfo.value==incomeInfo.itemInfo.id}"></option>
+                    <select class="form-control" id="item" name="item"  >
+                        <option th:each="itemInfo:${itemInfo}" th:value="${itemInfo.value}" th:text="${itemInfo.name}" th:selected="${itemInfo.value==chargeVO.item}"></option>
                     </select>
                 </div>
             </div>
@@ -59,7 +59,7 @@
                 <div class="col-sm-10">
                     <select class="form-control" id="otherService" name="otherService">
                         <option  value="">----无----</option>
-                        <option th:each="otherService:${otherService}" th:value="${otherService.id}" th:text="${otherService.name}"></option>
+                        <option th:each="otherService:${otherService}" th:value="${otherService.id}" th:text="${otherService.name}" th:selected="${otherService.id==chargeVO.otherService}"></option>
                     </select>
                 </div>
             </div>
@@ -68,7 +68,7 @@
 
                 <div class="col-sm-10">
                     <select class="form-control" id="incomePlatform" name="incomePlatform">
-                        <option th:each="incomePlatform:${incomePlatform}" th:value="${incomePlatform.id}" th:text="${incomePlatform.name}"></option>
+                        <option th:each="incomePlatform:${incomePlatform}" th:value="${incomePlatform.id}" th:text="${incomePlatform.name}" th:selected="${incomePlatform.id==chargeVO.incomePlatform}"></option>
                     </select>
                 </div>
             </div>
@@ -77,7 +77,7 @@
 
                 <div class="col-sm-10">
                     <select class="form-control" id="incomeType" name="incomeType">
-                        <option th:each="incomeType:${incomeType}" th:value="${incomeType.id}" th:text="${incomeType.name}"></option>
+                        <option th:each="incomeType:${incomeType}" th:value="${incomeType.id}" th:text="${incomeType.name}" th:selected="${incomeType.id==chargeVO.incomeType}"></option>
                     </select>
                 </div>
             </div>
@@ -86,7 +86,7 @@
 
                 <div class="col-sm-10">
                     <select class="form-control" id="customType" name="customType">
-                        <option th:each="customType:${customType}" th:value="${customType.id}" th:text="${customType.name}"></option>
+                        <option th:each="customType:${customType}" th:value="${customType.id}" th:text="${customType.name}" th:selected="${customType.id==chargeVO.customType}"></option>
                     </select>
                 </div>
             </div>
@@ -94,14 +94,14 @@
                 <label for="customMobile" class="col-sm-2 control-label">客户手机号</label>
 
                 <div class="col-sm-10">
-                    <input type="text" class="form-control" placeholder="客户手机号" id="customMobile" name="customMobile">
+                    <input type="text" class="form-control" placeholder="客户手机号" id="customMobile" name="customMobile" th:value="${chargeVO.customMobile}">
                 </div>
             </div>
             <div class="form-group">
                 <label for="incomeValue" class="col-sm-2 control-label">金额</label>
 
                 <div class="col-sm-10">
-                    <input type="text" class="form-control"  id="incomeValue" name="incomeValue" th:value="${incomeInfo.incomeValue}">
+                    <input type="text" class="form-control"  id="incomeValue" name="incomeValue" th:value="${chargeVO.incomeValue}">
                 </div>
             </div>
             <div class="form-group">
@@ -112,7 +112,7 @@
                         <div class="input-group-addon">
                             <i class="fa fa-calendar"></i>
                         </div>
-                        <input type="text" class="form-control pull-right" th:value="${#dates.format(new java.util.Date().getTime(), 'yyyy-MM-dd')}" id="operateTime" name="operateTime" data-ad-format="yyyy-mm-dd">
+                        <input type="text" class="form-control pull-right" th:value="${#dates.format(chargeVO.operateTime, 'yyyy-MM-dd')}" id="operateTime" name="operateTime" data-ad-format="yyyy-mm-dd">
                     </div>
                 </div>
             </div>
@@ -121,8 +121,9 @@
             <button type="submit" class="btn btn-info pull-right">提交</button>
         </div>
         <!-- /.box-footer -->
+    </div>
     </form>
-</div>
+
 
 <!-- jQuery 3 -->
 <script src="../bower_components/jquery/dist/jquery.min.js"></script>
@@ -144,7 +145,10 @@
         $('#operateTime').datepicker({
             format: 'yyyy-mm-dd',
             autoclose: true
-        })
+        });
+        if(""!=$('#incomeID').val()){
+            $("#thisform").attr('action',"[[@{saveIncome}]]");
+        }
     })
 </script>
 </body>

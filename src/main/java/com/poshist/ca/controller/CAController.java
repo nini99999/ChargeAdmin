@@ -1,6 +1,7 @@
 package com.poshist.ca.controller;
 
 import com.poshist.ca.entity.IncomeInfo;
+import com.poshist.ca.entity.PayInfo;
 import com.poshist.ca.service.CAService;
 import com.poshist.ca.vo.ChargeVO;
 import com.poshist.common.Constant;
@@ -19,6 +20,22 @@ import java.util.List;
 public class CAController {
     @Autowired
     private CAService caService;
+    @RequestMapping("/payList")
+    public String payList(Model model, HttpServletRequest request){
+//        Integer pageNumber=null;
+//        if(null==request.getParameter("pageNumber")){
+//             pageNumber =1;
+//        }else {
+//             pageNumber = Integer.valueOf(request.getParameter("pageNumber"));
+//        }[[${session.loginUser.user.realName}]]
+//        Page<IncomeInfo> page=caService.getIncomeList(pageNumber);
+//        model.addAttribute("incomeList",page.getContent());
+//        model.addAttribute("page",page);
+//        page.getPageable().getPageNumber()
+        List <PayInfo> list=caService.getPayList();
+        model.addAttribute("payList",list);
+        return "ca/payList";
+    }
     @RequestMapping("/incomeList")
     public String incomeList(Model model, HttpServletRequest request){
 //        Integer pageNumber=null;
@@ -36,7 +53,7 @@ public class CAController {
         return "ca/incomeList";
     }
     @RequestMapping("/addIncomeInit")
-    public String addIncomeInit(@ModelAttribute(value="incomeInfo")IncomeInfo  incomeInfo, Model model){
+    public String addIncomeInit(@ModelAttribute(value="chargeVO")ChargeVO  chargeVO, Model model){
         List incomeType=caService.getDictionaryInfoListByType(Constant.INCOMETYPE);
         List incomePlatform=caService.getDictionaryInfoListByType(Constant.INCOMEPLATFORM);
         List otherService=caService.getDictionaryInfoListByType(Constant.OTHERSERVICE);
@@ -47,13 +64,22 @@ public class CAController {
         model.addAttribute("otherService",otherService);
         model.addAttribute("customType",customType);
         model.addAttribute("itemInfo",itemInfo);
-        model.addAttribute("incomeInfo",incomeInfo);
+        if (null==chargeVO||null==chargeVO.getId()){
+         chargeVO=new ChargeVO();
+         chargeVO.init();
+        }
+        model.addAttribute("chargeVO",chargeVO);
         return "ca/incomeInfo";
     }
     @RequestMapping("/addIncome")
     public String addIncome(ChargeVO chargeVO){
-        caService.saveIncomeInfo(chargeVO);
+        caService.addIncomeInfo(chargeVO);
         return "redirect:addIncomeInit";
+    }
+    @RequestMapping("/saveIncome")
+    public String saveIncome(ChargeVO chargeVO){
+        caService.saveIncomeInfo(chargeVO);
+        return "redirect:incomeList";
     }
     @RequestMapping("/delIncome")
     public String delIncome(HttpServletRequest request){
@@ -62,8 +88,8 @@ public class CAController {
     }
     @RequestMapping("/editIncomeInit")
     public String editIncomeInit(HttpServletRequest request, RedirectAttributes attr){
-       IncomeInfo incomeInfo=caService.getIncomeInfo(Long.valueOf(request.getParameter("id")));
-        attr.addFlashAttribute("incomeInfo",incomeInfo);
+       ChargeVO chargeVO =caService.getIncomeInfo(Long.valueOf(request.getParameter("id")));
+        attr.addFlashAttribute("chargeVO",chargeVO);
         return "redirect:addIncomeInit";
     }
 

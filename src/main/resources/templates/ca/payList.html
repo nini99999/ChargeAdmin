@@ -1,0 +1,166 @@
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <!-- Bootstrap 3.3.7 -->
+    <link rel="stylesheet" href="../bower_components/bootstrap/dist/css/bootstrap.min.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="../bower_components/font-awesome/css/font-awesome.min.css">
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="../bower_components/Ionicons/css/ionicons.min.css">
+    <!-- DataTables -->
+    <link rel="stylesheet" href="../bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="../dist/css/AdminLTE.min.css">
+    <!-- AdminLTE Skins. Choose a skin from the css/skins
+         folder instead of downloading all of them to reduce the load. -->
+    <link rel="stylesheet" href="../dist/css/skins/_all-skins.min.css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- Google Font -->
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+    <script>
+        var id;
+        function  isDelIncome(value)
+        {
+            id=value;
+        }
+        function delIncome()
+        {
+            window.location.href="delIncome?id="+id;
+        }
+        function editIncome(value )
+        {
+            window.location.href="editIncomeInit?id="+value;
+        }
+    </script>
+
+</head>
+<body class="hold-transition skin-blue sidebar-mini">
+    <!-- Main content -->
+    <section class="content">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="box">
+                    <div class="box-header">
+                        <div class="col-md-1" align="middle">
+                            <button type="button" class="btn btn-block btn-default " onclick="add();">新增</button>
+                        </div>
+                    </div>
+                    <!-- /.box-header -->
+                    <div class="box-body">
+                        <table id="payTable" class="table table-bordered table-hover">
+                            <thead>
+                            <tr>
+                                <th  rowspan="1" colspan="1" >编号</th>
+                                <th  rowspan="1" colspan="1" >项目</th>
+                                <th  rowspan="1" colspan="1" >附加服务</th>
+                                <th  rowspan="1" colspan="1" >收款平台</th>
+                                <th  rowspan="1" colspan="1" >结款类型</th>
+                                <th  rowspan="1" colspan="1">客户类型</th>
+                                <th  rowspan="1" colspan="1">客户手机号</th>
+                                <th  rowspan="1" colspan="1">金额</th>
+                                <th  rowspan="1" colspan="1">收款时间</th>
+                                <th  rowspan="1" colspan="1">收款员</th>
+                                <th rowspan="1" colspan="1">操作</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="pay:${payList}" th:object="${pay}">
+                                <td th:text="*{id}"></td>
+                                <td th:text="*{itemInfo.name}"></td>
+                                <td th:if="*{otherService!=null}" th:text="*{otherService.name}"></td>  <td th:if="*{otherService==null}" ></td>
+                                <td th:text="*{incomePlatform.name}"></td>
+                                <td th:text="*{incomeType.name}"></td>
+                                <td th:text="*{customType.name}"></td>
+                                <td th:text="*{customMobile}"></td>
+                                <td th:text="*{incomeValue}"></td>
+                                <td th:text="*{#dates.format(operateTime, 'yyyy-MM-dd')}"></td>
+                                <td th:text="*{operate.realName}"></td>
+                                <td >
+                                    <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#modal-warning"  data-   th:onclick="'javascript:isDelIncome(\''+*{id}+'\');'" >
+                                        删除
+                                    </button>
+                                    <button type="button" class="btn  btn-primary" th:onclick="'javascript:editIncome(\''+*{id}+'\');'">修改</button>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- /.box-body -->
+                </div>
+                <!-- /.box -->
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+    </section>
+    <!-- /.content -->
+    <div class="modal modal-warning fade" id="modal-warning">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">删除确认</h4>
+                </div>
+                <div class="modal-body">
+                    <p>确认删除该条数据吗？</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">关闭</button>
+                    <button type="button" class="btn btn-outline" data-dismiss="modal" onclick="delIncome();">确认</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+
+</body>
+<!-- jQuery 3 -->
+<script src="../bower_components/jquery/dist/jquery.min.js"></script>
+<!-- Bootstrap 3.3.7 -->
+<script src="../bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+<!-- DataTables -->
+<script src="../bower_components/datatables.net/js/jquery.dataTables.min.js"></script>
+<script src="../bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+<!-- SlimScroll -->
+<script src="../bower_components/jquery-slimscroll/jquery.slimscroll.min.js"></script>
+<!-- FastClick -->
+<script src="../bower_components/fastclick/lib/fastclick.js"></script>
+<!-- AdminLTE App -->
+<script src="../dist/js/adminlte.min.js"></script>
+<!-- AdminLTE for demo purposes -->
+<script src="../dist/js/demo.js"></script>
+<!-- page script -->
+<script>
+
+    function add(){
+        window.location.href="addIncomeInit";
+    }
+    $(function () {
+        $('#payTable').DataTable({
+            'paging'      : true,
+            'lengthChange': false,
+            'searching'   : false,
+            'ordering'    : false,
+            'info'        : true,
+            'autoWidth'   : false,
+        })
+    })
+
+</script>
+</body>
+</html>

@@ -3,9 +3,11 @@ package com.poshist.ca.service;
 import com.poshist.ca.entity.DictionaryInfo;
 import com.poshist.ca.entity.IncomeInfo;
 import com.poshist.ca.entity.ItemInfo;
+import com.poshist.ca.entity.PayInfo;
 import com.poshist.ca.repository.DictionaryInfoDao;
 import com.poshist.ca.repository.IncomeInfoDao;
 import com.poshist.ca.repository.ItemInfoDao;
+import com.poshist.ca.repository.PayInfoDao;
 import com.poshist.ca.vo.ChargeVO;
 import com.poshist.ca.vo.SelectVO;
 import com.poshist.common.Constant;
@@ -32,9 +34,15 @@ public class CAService {
     private ItemInfoDao itemInfoDao;
     @Autowired
     private UserDao userDao;
+    @Autowired
+    private PayInfoDao payInfoDao;
     public Page<IncomeInfo> getIncomeList(Integer pageNumber){
         Pageable pageable = new PageRequest(pageNumber-1, Constant.PAGESIZE);
         return incomeInfoDao.getAllByStatusOrderByIdDesc(0,pageable);
+    }
+
+    public List<PayInfo> getPayList(){
+        return payInfoDao.getAllByStatusOrderByIdDesc(0);
     }
     public List<IncomeInfo> getIncomeList(){
         return incomeInfoDao.getAllByStatusOrderByIdDesc(0);
@@ -52,8 +60,21 @@ public class CAService {
 
      return analysisItem(itemList);
     }
-    public IncomeInfo getIncomeInfo(Long id){
-        return incomeInfoDao.findById(id).get();
+    public ChargeVO getIncomeInfo(Long id){
+        IncomeInfo incomeInfo= incomeInfoDao.findById(id).get();
+        ChargeVO chargeVO=new ChargeVO();
+        chargeVO.setCustomMobile(incomeInfo.getCustomMobile());
+        chargeVO.setCustomType(incomeInfo.getCustomType().getId());
+        chargeVO.setIncomePlatform(incomeInfo.getIncomePlatform().getId());
+        chargeVO.setIncomeType(incomeInfo.getIncomeType().getId());
+        chargeVO.setIncomeValue(incomeInfo.getIncomeValue());
+        chargeVO.setItem(incomeInfo.getItemInfo().getId());
+        chargeVO.setOperateTime(incomeInfo.getOperateTime());
+        if(null!=incomeInfo.getOtherService()) {
+            chargeVO.setOtherService(incomeInfo.getOtherService().getId());
+        }
+        chargeVO.setId(incomeInfo.getId());
+        return chargeVO;
     }
     private List<SelectVO> analysisItem(List<ItemInfo> itemList){
          List<SelectVO> list=new ArrayList<SelectVO>();
@@ -80,8 +101,25 @@ public class CAService {
 
     }
 
-    public IncomeInfo saveIncomeInfo(ChargeVO chargeVO){
+    public IncomeInfo addIncomeInfo(ChargeVO chargeVO){
         IncomeInfo incomeInfo=new IncomeInfo();
+        incomeInfo=  incomeInfoToVO(incomeInfo,chargeVO);
+        incomeInfo.setCreateTime(new Date());
+        incomeInfo.setStatus(0);
+        UserVO principal = (UserVO) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        incomeInfo.setOperate(userDao.findById(principal.getUser().getId()).get());
+        incomeInfoDao.save(incomeInfo);
+
+        return incomeInfo;
+    }
+    public IncomeInfo saveIncomeInfo(ChargeVO chargeVO){
+        IncomeInfo incomeInfo=incomeInfoDao.findById(chargeVO.getId()).get();
+        incomeInfo=incomeInfoToVO(incomeInfo,chargeVO);
+        incomeInfoDao.save(incomeInfo);
+        return incomeInfo;
+    }
+
+    private IncomeInfo incomeInfoToVO(IncomeInfo incomeInfo ,ChargeVO chargeVO){
 
         ItemInfo itemInfo=itemInfoDao.findById(chargeVO.getItem()).get();
         incomeInfo.setItemInfo(itemInfo);
@@ -100,16 +138,10 @@ public class CAService {
         incomeInfo.setCustomType(customType);
 
 
-
+        incomeInfo.setId(chargeVO.getId());
         incomeInfo.setIncomeValue(chargeVO.getIncomeValue());
         incomeInfo.setCustomMobile(chargeVO.getCustomMobile());
         incomeInfo.setOperateTime(chargeVO.getOperateTime());
-        incomeInfo.setCreateTime(new Date());
-        incomeInfo.setStatus(0);
-        UserVO principal = (UserVO) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        incomeInfo.setOperate(userDao.findById(principal.getUser().getId()).get());
-        incomeInfoDao.save(incomeInfo);
-
         return incomeInfo;
     }
     public void delIncome(Long id){

@@ -5,6 +5,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import java.util.Date;
 
 public class ChargeVO {
+    private Long id;
     private Long item;
     private Long otherService;
     private Long incomePlatform;
@@ -14,6 +15,14 @@ public class ChargeVO {
     private String customMobile;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date operateTime;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public Long getItem() {
         return item;
@@ -78,4 +87,10 @@ public class ChargeVO {
     public void setOperateTime(Date operateTime) {
         this.operateTime = operateTime;
     }
+
+    public void init(){
+        this.incomeValue=0d;
+        this.operateTime=new Date();
+    }
+
 }
