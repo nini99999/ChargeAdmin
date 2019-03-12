@@ -23,7 +23,7 @@ public class BIService {
         cal.add(Calendar.DATE,-days);
           for (int i=0;i<days;i++){
               cal.add(Calendar.DATE,1);
-              titles+=titelDf.format(cal.getTime())+",";
+              titles+="'"+titelDf.format(cal.getTime())+"',";
               Double value=payInfoDao.getSumByStatusAndOperateTimeAfterAndOperateTimerBefore(0,df.format(cal.getTime()),df.format(cal.getTime()));
               if(null==value){
                   value =0d;
@@ -44,7 +44,7 @@ public class BIService {
         cal.add(Calendar.DATE,-days);
         for (int i=0;i<days;i++){
             cal.add(Calendar.DATE,1);
-            titles+=titelDf.format(cal.getTime())+",";
+            titles+="'"+titelDf.format(cal.getTime())+"',";
             Double value=incomeInfoDao.getSumByStatusAndOperateTimeAfterAndOperateTimerBefore(0,df.format(cal.getTime()),df.format(cal.getTime()));
             if(null==value){
                 value =0d;

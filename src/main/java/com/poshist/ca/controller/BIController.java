@@ -17,7 +17,7 @@ public class BIController {
         String [] lastTenPay=biService.getLastPay(10);
         String [] lastTenIncome=biService.getLastIncome(10);
         Double todayPay=biService.getTodayPay();
-        Double todayIncome=biService.getTodayPay();
+        Double todayIncome=biService.getTodayIncome();
         Double monthPay=biService.getMonthPay();
         Double monthIncome=biService.getMonthIncome();
         model.addAttribute("lastTenPay",lastTenPay);
