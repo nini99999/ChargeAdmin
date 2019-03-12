@@ -60,6 +60,23 @@ public class CAService {
 
      return analysisItem(itemList);
     }
+    public ChargeVO getPayInfo(Long id){
+        PayInfo payInfo= payInfoDao.findById(id).get();
+        ChargeVO chargeVO=new ChargeVO();
+        chargeVO.setCustomMobile(payInfo.getCustomMobile());
+        chargeVO.setCustomType(payInfo.getCustomType().getId());
+        chargeVO.setIncomePlatform(payInfo.getIncomePlatform().getId());
+        chargeVO.setIncomeType(payInfo.getIncomeType().getId());
+        chargeVO.setIncomeValue(payInfo.getIncomeValue());
+        chargeVO.setItem(payInfo.getItemInfo().getId());
+        chargeVO.setOperateTime(payInfo.getOperateTime());
+        if(null!=payInfo.getOtherService()) {
+            chargeVO.setOtherService(payInfo.getOtherService().getId());
+        }
+        chargeVO.setId(payInfo.getId());
+        return chargeVO;
+    }
+
     public ChargeVO getIncomeInfo(Long id){
         IncomeInfo incomeInfo= incomeInfoDao.findById(id).get();
         ChargeVO chargeVO=new ChargeVO();
@@ -101,9 +118,20 @@ public class CAService {
 
     }
 
+    public PayInfo addPayInfo(ChargeVO chargeVO){
+        PayInfo payInfo=new PayInfo();
+        payInfo=  VOTopayInfo(payInfo,chargeVO);
+        payInfo.setCreateTime(new Date());
+        payInfo.setStatus(0);
+        UserVO principal = (UserVO) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        payInfo.setOperate(userDao.findById(principal.getUser().getId()).get());
+        payInfoDao.save(payInfo);
+        return payInfo;
+    }
+
     public IncomeInfo addIncomeInfo(ChargeVO chargeVO){
         IncomeInfo incomeInfo=new IncomeInfo();
-        incomeInfo=  incomeInfoToVO(incomeInfo,chargeVO);
+        incomeInfo=  VOToIncomeInfo(incomeInfo,chargeVO);
         incomeInfo.setCreateTime(new Date());
         incomeInfo.setStatus(0);
         UserVO principal = (UserVO) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -112,14 +140,49 @@ public class CAService {
 
         return incomeInfo;
     }
+
+    public PayInfo savePayInfo(ChargeVO chargeVO){
+        PayInfo payInfo=payInfoDao.findById(chargeVO.getId()).get();
+        payInfo= VOTopayInfo(payInfo,chargeVO);
+        payInfoDao.save(payInfo);
+        return payInfo;
+    }
+
     public IncomeInfo saveIncomeInfo(ChargeVO chargeVO){
         IncomeInfo incomeInfo=incomeInfoDao.findById(chargeVO.getId()).get();
-        incomeInfo=incomeInfoToVO(incomeInfo,chargeVO);
+        incomeInfo= VOToIncomeInfo(incomeInfo,chargeVO);
         incomeInfoDao.save(incomeInfo);
         return incomeInfo;
     }
 
-    private IncomeInfo incomeInfoToVO(IncomeInfo incomeInfo ,ChargeVO chargeVO){
+
+    private PayInfo VOTopayInfo(PayInfo payInfo , ChargeVO chargeVO){
+
+        ItemInfo itemInfo=itemInfoDao.findById(chargeVO.getItem()).get();
+        payInfo.setItemInfo(itemInfo);
+
+        if(null!=chargeVO.getOtherService()) {
+            DictionaryInfo otherService = dictionaryInfoDao.findById(chargeVO.getOtherService()).get();
+            payInfo.setOtherService(otherService);
+        }
+        DictionaryInfo incomePlatform= dictionaryInfoDao.findById(chargeVO.getIncomePlatform()).get();
+        payInfo.setIncomePlatform(incomePlatform);
+
+        DictionaryInfo incomeType=dictionaryInfoDao.findById(chargeVO.getIncomeType()).get();
+        payInfo.setIncomeType(incomeType);
+
+        DictionaryInfo customType=dictionaryInfoDao.findById(chargeVO.getCustomType()).get();
+        payInfo.setCustomType(customType);
+
+
+        payInfo.setId(chargeVO.getId());
+        payInfo.setIncomeValue(chargeVO.getIncomeValue());
+        payInfo.setCustomMobile(chargeVO.getCustomMobile());
+        payInfo.setOperateTime(chargeVO.getOperateTime());
+        return payInfo;
+    }
+
+    private IncomeInfo VOToIncomeInfo(IncomeInfo incomeInfo , ChargeVO chargeVO){
 
         ItemInfo itemInfo=itemInfoDao.findById(chargeVO.getItem()).get();
         incomeInfo.setItemInfo(itemInfo);
@@ -143,6 +206,12 @@ public class CAService {
         incomeInfo.setCustomMobile(chargeVO.getCustomMobile());
         incomeInfo.setOperateTime(chargeVO.getOperateTime());
         return incomeInfo;
+    }
+
+    public void delPay(Long id){
+        PayInfo payInfo=payInfoDao.findById(id).get();
+        payInfo.setStatus(1);
+        payInfoDao.save(payInfo);
     }
     public void delIncome(Long id){
         IncomeInfo incomeInfo=incomeInfoDao.findById(id).get();

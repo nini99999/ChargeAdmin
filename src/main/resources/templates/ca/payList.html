@@ -32,17 +32,17 @@
           href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
     <script>
         var id;
-        function  isDelIncome(value)
+        function  isDelPay(value)
         {
             id=value;
         }
-        function delIncome()
+        function delPay()
         {
-            window.location.href="delIncome?id="+id;
+            window.location.href="delPay?id="+id;
         }
-        function editIncome(value )
+        function editPay(value )
         {
-            window.location.href="editIncomeInit?id="+value;
+            window.location.href="editPayInit?id="+value;
         }
     </script>
 
@@ -55,7 +55,7 @@
                 <div class="box">
                     <div class="box-header">
                         <div class="col-md-1" align="middle">
-                            <button type="button" class="btn btn-block btn-default " onclick="add();">新增</button>
+                            <button type="button" class="btn btn-block btn-default " onclick="add();">新增支出</button>
                         </div>
                     </div>
                     <!-- /.box-header -->
@@ -71,8 +71,8 @@
                                 <th  rowspan="1" colspan="1">客户类型</th>
                                 <th  rowspan="1" colspan="1">客户手机号</th>
                                 <th  rowspan="1" colspan="1">金额</th>
-                                <th  rowspan="1" colspan="1">收款时间</th>
-                                <th  rowspan="1" colspan="1">收款员</th>
+                                <th  rowspan="1" colspan="1">付款时间</th>
+                                <th  rowspan="1" colspan="1">付款员</th>
                                 <th rowspan="1" colspan="1">操作</th>
                             </tr>
                             </thead>
@@ -89,10 +89,10 @@
                                 <td th:text="*{#dates.format(operateTime, 'yyyy-MM-dd')}"></td>
                                 <td th:text="*{operate.realName}"></td>
                                 <td >
-                                    <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#modal-warning"  data-   th:onclick="'javascript:isDelIncome(\''+*{id}+'\');'" >
+                                    <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#modal-warning"  data-   th:onclick="'javascript:isDelPay(\''+*{id}+'\');'" >
                                         删除
                                     </button>
-                                    <button type="button" class="btn  btn-primary" th:onclick="'javascript:editIncome(\''+*{id}+'\');'">修改</button>
+                                    <button type="button" class="btn  btn-primary" th:onclick="'javascript:editPay(\''+*{id}+'\');'">修改</button>
                                 </td>
                             </tr>
                             </tbody>
@@ -120,7 +120,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">关闭</button>
-                    <button type="button" class="btn btn-outline" data-dismiss="modal" onclick="delIncome();">确认</button>
+                    <button type="button" class="btn btn-outline" data-dismiss="modal" onclick="delPay();">确认</button>
                 </div>
             </div>
             <!-- /.modal-content -->
@@ -148,7 +148,7 @@
 <script>
 
     function add(){
-        window.location.href="addIncomeInit";
+        window.location.href="addPayInit";
     }
     $(function () {
         $('#payTable').DataTable({

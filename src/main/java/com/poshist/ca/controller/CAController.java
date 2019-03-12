@@ -52,6 +52,26 @@ public class CAController {
         model.addAttribute("incomeList",list);
         return "ca/incomeList";
     }
+
+    @RequestMapping("/addPayInit")
+    public String addPayInit(@ModelAttribute(value="chargeVO")ChargeVO  chargeVO, Model model){
+        List payType=caService.getDictionaryInfoListByType(Constant.INCOMETYPE);
+        List payPlatform=caService.getDictionaryInfoListByType(Constant.INCOMEPLATFORM);
+        List otherService=caService.getDictionaryInfoListByType(Constant.OTHERSERVICE);
+        List customType=caService.getDictionaryInfoListByType(Constant.CUSTOMTYPE);
+        List itemInfo=caService.getItemInfo(Constant.TYPEINCOME);
+        model.addAttribute("payType",payType);
+        model.addAttribute("payPlatform",payPlatform);
+        model.addAttribute("otherService",otherService);
+        model.addAttribute("customType",customType);
+        model.addAttribute("itemInfo",itemInfo);
+        if (null==chargeVO||null==chargeVO.getId()){
+            chargeVO=new ChargeVO();
+            chargeVO.init();
+        }
+        model.addAttribute("chargeVO",chargeVO);
+        return "ca/payInfo";
+    }
     @RequestMapping("/addIncomeInit")
     public String addIncomeInit(@ModelAttribute(value="chargeVO")ChargeVO  chargeVO, Model model){
         List incomeType=caService.getDictionaryInfoListByType(Constant.INCOMETYPE);
@@ -71,20 +91,44 @@ public class CAController {
         model.addAttribute("chargeVO",chargeVO);
         return "ca/incomeInfo";
     }
+
+    @RequestMapping("/addPay")
+    public String addPay(ChargeVO chargeVO){
+        caService.addPayInfo(chargeVO);
+        return "redirect:addIncomeInit";
+    }
     @RequestMapping("/addIncome")
     public String addIncome(ChargeVO chargeVO){
         caService.addIncomeInfo(chargeVO);
         return "redirect:addIncomeInit";
+    }
+    @RequestMapping("/savePay")
+    public String savePay(ChargeVO chargeVO){
+        caService.savePayInfo(chargeVO);
+        return "redirect:payList";
     }
     @RequestMapping("/saveIncome")
     public String saveIncome(ChargeVO chargeVO){
         caService.saveIncomeInfo(chargeVO);
         return "redirect:incomeList";
     }
+
+    @RequestMapping("/delPay")
+    public String delPay(HttpServletRequest request){
+        caService.delPay(Long.valueOf(request.getParameter("id")));
+        return "redirect:payList";
+    }
     @RequestMapping("/delIncome")
     public String delIncome(HttpServletRequest request){
         caService.delIncome(Long.valueOf(request.getParameter("id")));
         return "redirect:incomeList";
+    }
+
+    @RequestMapping("/editPayInit")
+    public String editPayInit(HttpServletRequest request, RedirectAttributes attr){
+        ChargeVO chargeVO =caService.getPayInfo(Long.valueOf(request.getParameter("id")));
+        attr.addFlashAttribute("chargeVO",chargeVO);
+        return "redirect:addPayInit";
     }
     @RequestMapping("/editIncomeInit")
     public String editIncomeInit(HttpServletRequest request, RedirectAttributes attr){
