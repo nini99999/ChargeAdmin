@@ -10,16 +10,18 @@ import com.poshist.ca.repository.ItemInfoDao;
 import com.poshist.ca.repository.PayInfoDao;
 import com.poshist.ca.vo.ChargeVO;
 import com.poshist.ca.vo.SelectVO;
-import com.poshist.common.Constant;
+import com.poshist.common.Utils;
 import com.poshist.sys.repository.UserDao;
 import com.poshist.sys.vo.UserVO;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -36,16 +38,65 @@ public class CAService {
     private UserDao userDao;
     @Autowired
     private PayInfoDao payInfoDao;
-    public Page<IncomeInfo> getIncomeList(Integer pageNumber){
-        Pageable pageable = new PageRequest(pageNumber-1, Constant.PAGESIZE);
-        return incomeInfoDao.getAllByStatusOrderByIdDesc(0,pageable);
-    }
 
-    public List<PayInfo> getPayList(){
-        return payInfoDao.getAllByStatusOrderByIdDesc(0);
+    public List<PayInfo> getPayList(ChargeVO chargeVO){
+
+        List<PayInfo> result = payInfoDao.findAll(new Specification<PayInfo>() {
+            @Override
+            public Predicate toPredicate(Root<PayInfo> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+                List<Predicate> list = new ArrayList<Predicate>();
+                list.add(cb.equal(root.get("status"),0));
+                list.add(cb.greaterThanOrEqualTo(root.get("operateTime"), Utils.StrToDate(chargeVO.getOperateTimeStartStr())));
+                list .add(cb.lessThanOrEqualTo(root.get("operateTime"), Utils.StrToDate(chargeVO.getGetOperateTimeEndStr())));
+                if(null!=chargeVO.getItem()){
+                    ItemInfo itemInfo=itemInfoDao.findById(chargeVO.getItem()).get();
+                    list.add(cb.equal(root.get("itemInfo"),itemInfo));
+                }
+                if(null!=chargeVO.getIncomeType()){
+                    DictionaryInfo dictionaryInfo=dictionaryInfoDao.findById(chargeVO.getIncomeType()).get();
+                    list.add(cb.equal(root.get("incomeType.id"),dictionaryInfo));
+                }
+                if(null!=chargeVO.getCustomMobile()&&""!=chargeVO.getCustomMobile()){
+                    list.add(cb.like(root.get("customMobile"),"%"+chargeVO.getCustomMobile()+"%"));
+                }
+
+                Predicate[] p = new Predicate[list.size()];
+
+                query.where(cb.and(list.toArray(p)));
+                query.orderBy(cb.desc(root.get("id")));
+                return query.getRestriction();
+            }
+        });
+        return result;
     }
-    public List<IncomeInfo> getIncomeList(){
-        return incomeInfoDao.getAllByStatusOrderByIdDesc(0);
+    public List<IncomeInfo> getIncomeList(ChargeVO chargeVO){
+        List<IncomeInfo> result = incomeInfoDao.findAll(new Specification<IncomeInfo>() {
+            @Override
+            public Predicate toPredicate(Root<IncomeInfo> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+                List<Predicate> list = new ArrayList<Predicate>();
+                list.add(cb.equal(root.get("status"),0));
+                list.add(cb.greaterThanOrEqualTo(root.get("operateTime"), Utils.StrToDate(chargeVO.getOperateTimeStartStr())));
+                list .add(cb.lessThanOrEqualTo(root.get("operateTime"), Utils.StrToDate(chargeVO.getGetOperateTimeEndStr())));
+                if(null!=chargeVO.getItem()){
+                    ItemInfo itemInfo=itemInfoDao.findById(chargeVO.getItem()).get();
+                    list.add(cb.equal(root.get("itemInfo"),itemInfo));
+                }
+                if(null!=chargeVO.getIncomeType()){
+                    DictionaryInfo dictionaryInfo=dictionaryInfoDao.findById(chargeVO.getIncomeType()).get();
+                    list.add(cb.equal(root.get("incomeType.id"),dictionaryInfo));
+                }
+                if(null!=chargeVO.getCustomMobile()&&""!=chargeVO.getCustomMobile()){
+                    list.add(cb.like(root.get("customMobile"),"%"+chargeVO.getCustomMobile()+"%"));
+                }
+
+                Predicate[] p = new Predicate[list.size()];
+
+                query.where(cb.and(list.toArray(p)));
+                query.orderBy(cb.desc(root.get("id")));
+                return query.getRestriction();
+            }
+        });
+        return result;
     }
     /**
      *  获取字典表

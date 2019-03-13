@@ -19,7 +19,10 @@
     <!-- AdminLTE Skins. Choose a skin from the css/skins
          folder instead of downloading all of them to reduce the load. -->
     <link rel="stylesheet" href="../dist/css/skins/_all-skins.min.css">
-
+    <!-- daterange picker -->
+    <link rel="stylesheet" href="../bower_components/bootstrap-daterangepicker/daterangepicker.css">
+    <!-- bootstrap datepicker -->
+    <link rel="stylesheet" href="../bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css">
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -50,6 +53,40 @@
 <body class="hold-transition skin-blue sidebar-mini">
     <!-- Main content -->
     <section class="content">
+        <div class="row">
+            <form  class="form-horizontal" th:action="@{payList}" method="post" id="thisform">
+                <label class="col-sm-1 control-label">付款时间：</label>
+                <div class="col-sm-2" >
+                    <div class="input-group">
+                        <div class="input-group-addon">
+                            <i class="fa fa-calendar"></i>
+                        </div>
+                        <input type="text" class="form-control pull-right" id="operateTime" name="operateTimeStr"  >
+                    </div>
+                </div>
+                <label class="col-sm-1 control-label">项目：</label>
+                <div class="col-sm-1">
+                    <select class="form-control" id="item" name="item"  >
+                        <option value="" >无限制</option>
+                        <option th:each="itemInfo:${itemInfo}" th:value="${itemInfo.value}" th:text="${itemInfo.name}" th:selected="${itemInfo.value==chargeVO.item}"></option>
+                    </select>
+                </div>
+                <label class="col-sm-1 control-label">结款类型：</label>
+                <div class="col-sm-1">
+                    <select class="form-control" id="incomeType" name="incomeType">
+                        <option value="">无限制</option>
+                        <option th:each="incomeType:${incomeType}" th:value="${incomeType.id}" th:text="${incomeType.name}" th:selected="${incomeType.id==chargeVO.incomeType}"></option>
+                    </select>
+                </div>
+                <label class="col-sm-1 control-label">客户手机号：</label>
+                <div class="col-sm-1">
+                    <input type="text" class="form-control" placeholder="客户手机号" id="customMobile" name="customMobile" th:value="${chargeVO.customMobile}">
+                </div>
+                <div class="col-sm-1">
+                    <button type="submit" class="btn btn-info pull-right">查询</button>
+                </div>
+            </form>
+        </div>
         <div class="row">
             <div class="col-xs-12">
                 <div class="box">
@@ -144,6 +181,11 @@
 <script src="../dist/js/adminlte.min.js"></script>
 <!-- AdminLTE for demo purposes -->
 <script src="../dist/js/demo.js"></script>
+<!-- bootstrap datepicker -->
+<script src="../bower_components/moment/min/moment.min.js"></script>
+<script src="../bower_components/bootstrap-daterangepicker/daterangepicker.js"></script>
+<!-- bootstrap datepicker -->
+<script src="../bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
 <!-- page script -->
 <script>
 
@@ -158,6 +200,14 @@
             'ordering'    : false,
             'info'        : true,
             'autoWidth'   : false,
+        })
+        //Date range picker
+        $('#operateTime').daterangepicker({
+            locale: {
+                format: 'YYYY-MM-DD'
+            },
+            startDate:'[(${chargeVO.operateTimeStartStr})]',
+            endDate: '[(${chargeVO.getOperateTimeEndStr})]'
         })
     })
 

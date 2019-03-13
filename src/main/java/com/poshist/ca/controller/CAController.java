@@ -21,34 +21,36 @@ public class CAController {
     @Autowired
     private CAService caService;
     @RequestMapping("/payList")
-    public String payList(Model model, HttpServletRequest request){
-//        Integer pageNumber=null;
-//        if(null==request.getParameter("pageNumber")){
-//             pageNumber =1;
-//        }else {
-//             pageNumber = Integer.valueOf(request.getParameter("pageNumber"));
-//        }[[${session.loginUser.user.realName}]]
-//        Page<IncomeInfo> page=caService.getIncomeList(pageNumber);
-//        model.addAttribute("incomeList",page.getContent());
-//        model.addAttribute("page",page);
-//        page.getPageable().getPageNumber()
-        List <PayInfo> list=caService.getPayList();
+    public String payList(Model model, ChargeVO chargeVO){
+        if(null==chargeVO.getOperateTimeStr()){
+            chargeVO=new ChargeVO();
+            chargeVO.init();
+        }
+        List <PayInfo> list=caService.getPayList(chargeVO);
+        List incomeType=caService.getDictionaryInfoListByType(Constant.INCOMETYPE);
+        List itemInfo=caService.getItemInfo(Constant.TYPEINCOME);
+        model.addAttribute("incomeType",incomeType);
+        model.addAttribute("itemInfo",itemInfo);
+
+        model.addAttribute("chargeVO",chargeVO);
         model.addAttribute("payList",list);
         return "ca/payList";
     }
     @RequestMapping("/incomeList")
-    public String incomeList(Model model, HttpServletRequest request){
-//        Integer pageNumber=null;
-//        if(null==request.getParameter("pageNumber")){
-//             pageNumber =1;
-//        }else {
-//             pageNumber = Integer.valueOf(request.getParameter("pageNumber"));
-//        }[[${session.loginUser.user.realName}]]
-//        Page<IncomeInfo> page=caService.getIncomeList(pageNumber);
-//        model.addAttribute("incomeList",page.getContent());
-//        model.addAttribute("page",page);
-//        page.getPageable().getPageNumber()
-       List <IncomeInfo> list=caService.getIncomeList();
+    public String incomeList(Model model, ChargeVO chargeVO){
+        if(null==chargeVO.getOperateTimeStr()){
+            chargeVO=new ChargeVO();
+            chargeVO.init();
+        }
+        List <IncomeInfo> list=caService.getIncomeList(chargeVO);
+        List incomeType=caService.getDictionaryInfoListByType(Constant.INCOMETYPE);
+        List itemInfo=caService.getItemInfo(Constant.TYPEINCOME);
+        model.addAttribute("incomeType",incomeType);
+        model.addAttribute("itemInfo",itemInfo);
+
+        model.addAttribute("chargeVO",chargeVO);
+        model.addAttribute("payList",list);
+
         model.addAttribute("incomeList",list);
         return "ca/incomeList";
     }
