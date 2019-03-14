@@ -35,7 +35,7 @@
       if (iframe) {
         var iframeWin = iframe.contentWindow || iframe.contentDocument.parentWindow;
         if (iframeWin.document.body) {
-          iframe.height = iframeWin.document.documentElement.scrollHeight || iframeWin.document.body.scrollHeight;
+          iframe.height = iframeWin.document.documentElement.scrollHeight+50 || iframeWin.document.body.scrollHeight+50;
         }
       }
     };
@@ -51,7 +51,7 @@
   <header class="main-header">
 
     <!-- Logo -->
-    <a href="index2.html" class="logo">
+    <a  href="bi/mainReport" target="menuFrame" class="logo">
       <!-- mini logo for sidebar mini 50x50 pixels -->
       <span class="logo-mini">花椒大料</span>
       <!-- logo for regular state and mobile devices -->
@@ -388,7 +388,7 @@
 
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
-    <iframe src="" id="menuFrame" name="menuFrame" frameborder="0" style="overflow:visible;" scrolling="yes"  height="100%" width="100%"  onload="setIframeHeight(this)"></iframe>
+    <iframe src="bi/mainReport" id="menuFrame" name="menuFrame" frameborder="0" style="overflow:visible;" scrolling="yes"  height="100%" width="100%"  onload="setIframeHeight(this)"></iframe>
   </div>
   <!-- /.content-wrapper -->
 

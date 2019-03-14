@@ -2,6 +2,8 @@ package com.poshist.ca.vo;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 public class ChargeVO {
@@ -13,8 +15,38 @@ public class ChargeVO {
     private Long customType;
     private Double incomeValue;
     private String customMobile;
+    private String operateTimeStr;
+    private String operateTimeStartStr;
+    private String getOperateTimeEndStr;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date operateTime;
+
+    public String getOperateTimeStartStr() {
+        return operateTimeStartStr;
+    }
+
+    public void setOperateTimeStartStr(String operateTimeStartStr) {
+        this.operateTimeStartStr = operateTimeStartStr;
+    }
+
+    public String getGetOperateTimeEndStr() {
+        return getOperateTimeEndStr;
+    }
+
+    public void setGetOperateTimeEndStr(String getOperateTimeEndStr) {
+        this.getOperateTimeEndStr = getOperateTimeEndStr;
+    }
+
+    public String getOperateTimeStr() {
+        return operateTimeStr;
+    }
+
+    public void setOperateTimeStr(String operateTimeStr) {
+        this.operateTimeStr = operateTimeStr;
+        String[] str=operateTimeStr.split(" - ");
+        this.operateTimeStartStr=str[0];
+        this.getOperateTimeEndStr=str[1];
+    }
 
     public Long getId() {
         return id;
@@ -91,6 +123,12 @@ public class ChargeVO {
     public void init(){
         this.incomeValue=0d;
         this.operateTime=new Date();
+        Calendar ca=Calendar.getInstance();
+        ca.add(Calendar.MONTH,-1);
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+       this.operateTimeStartStr =df.format(ca.getTime());
+       this.getOperateTimeEndStr=df.format(operateTime);
+
     }
 
 }
