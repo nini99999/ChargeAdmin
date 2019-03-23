@@ -34,6 +34,24 @@ public class PayInfo extends AbstractEntity {
     private Date operateTime;
     private Date createTime;
     private Integer status;
+    private Double itemValue;
+    private Double itemCount;
+
+    public Double getItemValue() {
+        return itemValue;
+    }
+
+    public void setItemValue(Double itemValue) {
+        this.itemValue = itemValue;
+    }
+
+    public Double getItemCount() {
+        return itemCount;
+    }
+
+    public void setItemCount(Double itemCount) {
+        this.itemCount = itemCount;
+    }
 
     public DictionaryInfo getOtherService() {
         return otherService;

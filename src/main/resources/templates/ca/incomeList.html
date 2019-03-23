@@ -54,7 +54,7 @@
     <!-- Main content -->
     <section class="content">
         <div class="row">
-            <form  class="form-horizontal" th:action="@{payList}" method="post" id="thisform">
+            <form  class="form-horizontal" th:action="@{incomeList}" method="post" id="thisform">
                 <label class="col-sm-1 control-label">付款时间：</label>
                 <div class="col-sm-2" >
                     <div class="input-group">
@@ -107,6 +107,8 @@
                                 <th  rowspan="1" colspan="1" >结款类型</th>
                                 <th  rowspan="1" colspan="1">客户类型</th>
                                 <th  rowspan="1" colspan="1">客户手机号</th>
+                                <th  rowspan="1" colspan="1">单价</th>
+                                <th  rowspan="1" colspan="1">数量</th>
                                 <th  rowspan="1" colspan="1">金额</th>
                                 <th  rowspan="1" colspan="1">收款时间</th>
                                 <th  rowspan="1" colspan="1">收款员</th>
@@ -122,6 +124,8 @@
                                 <td th:text="${income.incomeType.name}"></td>
                                 <td th:text="${income.customType.name}"></td>
                                 <td th:text="${income.customMobile}"></td>
+                                <td th:text="${income.itemValue}"></td>
+                                <td th:text="${income.itemCount}"></td>
                                 <td th:text="${income.incomeValue}"></td>
                                 <td th:text="${#dates.format(income.operateTime, 'yyyy-MM-dd')}"></td>
                                 <td th:text="${income.operate.realName}"></td>

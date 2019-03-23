@@ -18,8 +18,15 @@ public class ItemInfo extends AbstractEntity {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "parentInfo", fetch = FetchType.EAGER)
     @OrderBy("id")
     private Set<ItemInfo> childrenInfo;
+    private Double ItemValue;
 
+    public Double getItemValue() {
+        return ItemValue;
+    }
 
+    public void setItemValue(Double itemValue) {
+        ItemValue = itemValue;
+    }
 
     public String getName() {
         return name;

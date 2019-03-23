@@ -121,6 +121,8 @@ public class CAService {
         chargeVO.setIncomeValue(payInfo.getIncomeValue());
         chargeVO.setItem(payInfo.getItemInfo().getId());
         chargeVO.setOperateTime(payInfo.getOperateTime());
+        chargeVO.setItemCount(payInfo.getItemCount());
+        chargeVO.setItemValue(payInfo.getItemValue());
         if(null!=payInfo.getOtherService()) {
             chargeVO.setOtherService(payInfo.getOtherService().getId());
         }
@@ -138,6 +140,8 @@ public class CAService {
         chargeVO.setIncomeValue(incomeInfo.getIncomeValue());
         chargeVO.setItem(incomeInfo.getItemInfo().getId());
         chargeVO.setOperateTime(incomeInfo.getOperateTime());
+        chargeVO.setItemCount(incomeInfo.getItemCount());
+        chargeVO.setItemValue(incomeInfo.getItemValue());
         if(null!=incomeInfo.getOtherService()) {
             chargeVO.setOtherService(incomeInfo.getOtherService().getId());
         }
@@ -154,12 +158,14 @@ public class CAService {
                 SelectVO vo = new SelectVO();
                 vo.setName(itemInfo.getName());
                 vo.setValue(itemInfo.getId());
+                vo.setMemo(itemInfo.getItemValue().toString());
                 list.add(vo);
                 for (ItemInfo chilren : itemInfo.getChildrenInfo()) {
                     if(chilren.getStatus()==0) {
                         vo = new SelectVO();
                         vo.setName("----" + chilren.getName());
                         vo.setValue(chilren.getId());
+                        vo.setMemo(chilren.getItemValue().toString());
                         list.add(vo);
                     }
                 }
@@ -225,7 +231,8 @@ public class CAService {
         DictionaryInfo customType=dictionaryInfoDao.findById(chargeVO.getCustomType()).get();
         payInfo.setCustomType(customType);
 
-
+        payInfo.setItemCount(chargeVO.getItemCount());
+        payInfo.setItemValue(chargeVO.getItemValue());
         payInfo.setId(chargeVO.getId());
         payInfo.setIncomeValue(chargeVO.getIncomeValue());
         payInfo.setCustomMobile(chargeVO.getCustomMobile());
@@ -251,7 +258,8 @@ public class CAService {
         DictionaryInfo customType=dictionaryInfoDao.findById(chargeVO.getCustomType()).get();
         incomeInfo.setCustomType(customType);
 
-
+         incomeInfo.setItemCount(chargeVO.getItemCount());
+         incomeInfo.setItemValue(chargeVO.getItemValue());
         incomeInfo.setId(chargeVO.getId());
         incomeInfo.setIncomeValue(chargeVO.getIncomeValue());
         incomeInfo.setCustomMobile(chargeVO.getCustomMobile());

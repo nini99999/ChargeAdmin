@@ -28,7 +28,7 @@ public class CAController {
         }
         List <PayInfo> list=caService.getPayList(chargeVO);
         List incomeType=caService.getDictionaryInfoListByType(Constant.INCOMETYPE);
-        List itemInfo=caService.getItemInfo(Constant.TYPEINCOME);
+        List itemInfo=caService.getItemInfo(Constant.TYPEBUY);
         model.addAttribute("incomeType",incomeType);
         model.addAttribute("itemInfo",itemInfo);
 
@@ -61,7 +61,7 @@ public class CAController {
         List payPlatform=caService.getDictionaryInfoListByType(Constant.INCOMEPLATFORM);
         List otherService=caService.getDictionaryInfoListByType(Constant.OTHERSERVICE);
         List customType=caService.getDictionaryInfoListByType(Constant.CUSTOMTYPE);
-        List itemInfo=caService.getItemInfo(Constant.TYPEINCOME);
+        List itemInfo=caService.getItemInfo(Constant.TYPEBUY);
         model.addAttribute("payType",payType);
         model.addAttribute("payPlatform",payPlatform);
         model.addAttribute("otherService",otherService);

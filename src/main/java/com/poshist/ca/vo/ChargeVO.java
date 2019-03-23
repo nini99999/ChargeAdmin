@@ -18,6 +18,25 @@ public class ChargeVO {
     private String operateTimeStr;
     private String operateTimeStartStr;
     private String getOperateTimeEndStr;
+    private Double itemValue;
+    private Double itemCount;
+
+    public Double getItemValue() {
+        return itemValue;
+    }
+
+    public void setItemValue(Double itemValue) {
+        this.itemValue = itemValue;
+    }
+
+    public Double getItemCount() {
+        return itemCount;
+    }
+
+    public void setItemCount(Double itemCount) {
+        this.itemCount = itemCount;
+    }
+
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date operateTime;
 
@@ -123,6 +142,8 @@ public class ChargeVO {
     public void init(){
         this.incomeValue=0d;
         this.operateTime=new Date();
+        this.itemCount=0d;
+        this.itemValue=0d;
         Calendar ca=Calendar.getInstance();
         ca.add(Calendar.MONTH,-1);
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");

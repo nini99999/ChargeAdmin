@@ -35,17 +35,17 @@
           href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
     <script>
         var id;
-        function  isDelPay(value)
+        function  isDelIncome(value)
         {
             id=value;
         }
-        function delPay()
+        function delIncome()
         {
-            window.location.href="delPay?id="+id;
+            window.location.href="delIncome?id="+id;
         }
-        function editPay(value )
+        function editIncome(value )
         {
-            window.location.href="editPayInit?id="+value;
+            window.location.href="editIncomeInit?id="+value;
         }
     </script>
 
@@ -53,89 +53,38 @@
 <body class="hold-transition skin-blue sidebar-mini">
     <!-- Main content -->
     <section class="content">
-
-        <div class="row">
-            <form  class="form-horizontal" th:action="@{payList}" method="post" id="thisform">
-            <label class="col-sm-1 control-label">付款时间：</label>
-            <div class="col-sm-2" >
-                    <div class="input-group">
-                        <div class="input-group-addon">
-                            <i class="fa fa-calendar"></i>
-                        </div>
-                        <input type="text" class="form-control pull-right" id="operateTime" name="operateTimeStr"  >
-                    </div>
-            </div>
-                <label class="col-sm-1 control-label">项目：</label>
-                <div class="col-sm-1">
-                    <select class="form-control" id="item" name="item"  >
-                        <option value="" >无限制</option>
-                        <option th:each="itemInfo:${itemInfo}" th:value="${itemInfo.value}" th:text="${itemInfo.name}" th:selected="${itemInfo.value==chargeVO.item}"></option>
-                    </select>
-                </div>
-                <label class="col-sm-1 control-label">结款类型：</label>
-                <div class="col-sm-1">
-                    <select class="form-control" id="incomeType" name="incomeType">
-                        <option value="">无限制</option>
-                        <option th:each="incomeType:${incomeType}" th:value="${incomeType.id}" th:text="${incomeType.name}" th:selected="${incomeType.id==chargeVO.incomeType}"></option>
-                    </select>
-                </div>
-                <label class="col-sm-1 control-label">客户手机号：</label>
-                <div class="col-sm-1">
-                    <input type="text" class="form-control" placeholder="客户手机号" id="customMobile" name="customMobile" th:value="${chargeVO.customMobile}">
-                </div>
-                <div class="col-sm-1">
-                    <button type="submit" class="btn btn-info pull-right">查询</button>
-                </div>
-            </form>
-        </div>
-
         <div class="row">
             <div class="col-xs-12">
                 <div class="box">
                     <div class="box-header">
-                        <div class="col-md-1" align="right">
-                            <button type="button" class="btn btn-block btn-default " onclick="add();">新增支出</button>
+                        <div class="col-md-1" align="middle">
+                            <button type="button" class="btn btn-block btn-default " onclick="add();">新增用户</button>
                         </div>
                     </div>
                     <!-- /.box-header -->
                     <div class="box-body">
-                        <table id="payTable" class="table table-bordered table-hover">
+                        <table id="userTable" class="table table-bordered table-hover">
                             <thead>
                             <tr>
                                 <th  rowspan="1" colspan="1" >编号</th>
-                                <th  rowspan="1" colspan="1" >项目</th>
-                                <th  rowspan="1" colspan="1" >附加服务</th>
-                                <th  rowspan="1" colspan="1" >收款平台</th>
-                                <th  rowspan="1" colspan="1" >结款类型</th>
-                                <th  rowspan="1" colspan="1">客户类型</th>
-                                <th  rowspan="1" colspan="1">客户手机号</th>
-                                <th  rowspan="1" colspan="1">单价</th>
-                                <th  rowspan="1" colspan="1">数量</th>
-                                <th  rowspan="1" colspan="1">金额</th>
-                                <th  rowspan="1" colspan="1">付款时间</th>
-                                <th  rowspan="1" colspan="1">付款员</th>
+                                <th  rowspan="1" colspan="1" >登录名</th>
+                                <th  rowspan="1" colspan="1" >真实姓名</th>
+                                <th  rowspan="1" colspan="1" >状态</th>
                                 <th rowspan="1" colspan="1">操作</th>
                             </tr>
                             </thead>
                             <tbody>
-                            <tr th:each="pay:${payList}" th:object="${pay}">
+                            <tr th:each="user:${userList}" th:object="${user}">
                                 <td th:text="*{id}"></td>
-                                <td th:text="*{itemInfo.name}"></td>
-                                <td th:if="*{otherService!=null}" th:text="*{otherService.name}"></td>  <td th:if="*{otherService==null}" ></td>
-                                <td th:text="*{incomePlatform.name}"></td>
-                                <td th:text="*{incomeType.name}"></td>
-                                <td th:text="*{customType.name}"></td>
-                                <td th:text="*{customMobile}"></td>
-                                <td th:text="*{itemValue}"></td>
-                                <td th:text="*{itemCount}"></td>
-                                <td th:text="*{incomeValue}"></td>
-                                <td th:text="*{#dates.format(operateTime, 'yyyy-MM-dd')}"></td>
-                                <td th:text="*{operate.realName}"></td>
+                                <td th:text="*{userName}"></td>
+                                <td th:text="*{realName}"></td>
+                                <td th:if="*{status eq '0'} " th:text="有效"></td>  <td th:if="*{status   ne '0'}" th:text="无效" ></td>
+
                                 <td >
-                                    <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#modal-warning"  data-   th:onclick="'javascript:isDelPay(\''+*{id}+'\');'" >
+                                    <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#modal-warning"  data-   th:onclick="'javascript:isDelIncome(\''+${id}+'\');'" >
                                         删除
                                     </button>
-                                    <button type="button" class="btn  btn-primary" th:onclick="'javascript:editPay(\''+*{id}+'\');'">修改</button>
+                                    <button type="button" class="btn  btn-primary" th:onclick="'javascript:editIncome(\''+*{id}+'\');'">修改</button>
                                 </td>
                             </tr>
                             </tbody>
@@ -163,7 +112,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">关闭</button>
-                    <button type="button" class="btn btn-outline" data-dismiss="modal" onclick="delPay();">确认</button>
+                    <button type="button" class="btn btn-outline" data-dismiss="modal" onclick="delIncome();">确认</button>
                 </div>
             </div>
             <!-- /.modal-content -->
@@ -196,24 +145,16 @@
 <script>
 
     function add(){
-        window.location.href="addPayInit";
+        window.location.href="addUserInit";
     }
     $(function () {
-        $('#payTable').DataTable({
+        $('#userTable').DataTable({
             'paging'      : true,
             'lengthChange': false,
             'searching'   : false,
             'ordering'    : false,
             'info'        : true,
             'autoWidth'   : false,
-        })
-        //Date range picker
-        $('#operateTime').daterangepicker({
-            locale: {
-                format: 'YYYY-MM-DD'
-            },
-            startDate:'[(${chargeVO.operateTimeStartStr})]',
-            endDate: '[(${chargeVO.getOperateTimeEndStr})]'
         })
     })
 
