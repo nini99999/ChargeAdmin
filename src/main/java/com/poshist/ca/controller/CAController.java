@@ -37,7 +37,18 @@ public class CAController {
         out.close();
 
     }
+    @RequestMapping("/IncomeExcel")
+    public void IncomeExcel(ChargeVO chargeVO, HttpServletResponse response) throws IOException {
 
+        response.setContentType("multipart/form-data");
+        response.addHeader("Content-Disposition", "attachment;filename=" + new String("收款记录.xls".getBytes("UTF-8"), "ISO-8859-1") );
+        response.setContentType("application/octet-stream");
+        OutputStream out = new BufferedOutputStream(response.getOutputStream());
+        caService.getIncomeExcel(chargeVO,out);
+        out.flush();
+        out.close();
+
+    }
     @RequestMapping("/payList")
     public String payList(Model model, ChargeVO chargeVO) {
         if (null == chargeVO.getOperateTimeStr()) {

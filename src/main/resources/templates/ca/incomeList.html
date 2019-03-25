@@ -47,6 +47,13 @@
         {
             window.location.href="editIncomeInit?id="+value;
         }
+        function excel() {
+            $("#thisform").attr('action',"[[@{IncomeExcel}]]");
+        }
+        function select() {
+            $("#thisform").attr('action',"[[@{incomeList}]]");
+
+        }
     </script>
 
 </head>
@@ -82,8 +89,9 @@
                 <div class="col-sm-1">
                     <input type="text" class="form-control" placeholder="客户手机号" id="customMobile" name="customMobile" th:value="${chargeVO.customMobile}">
                 </div>
-                <div class="col-sm-1">
-                    <button type="submit" class="btn btn-info pull-right">查询</button>
+                <div class="col-sm-2">
+                    <button onclick="select();" class="btn btn-info pull-right">查询</button>&nbsp;&nbsp;&nbsp;&nbsp;
+                    <button  class="btn btn-info pull-right" onclick="excel();">导出EXCEL</button>&nbsp;&nbsp;&nbsp;&nbsp;
                 </div>
             </form>
         </div>

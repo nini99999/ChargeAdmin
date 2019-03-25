@@ -41,7 +41,27 @@ public class CAService {
     @Autowired
     private PayInfoDao payInfoDao;
     private  String[] excelTitles={"编号","项目","附加服务","收款平台","结款类型","客户类型","客户手机号","单价","数量","金额","收款时间","收款员"};
-
+    public void getIncomeExcel(ChargeVO chargeVO, OutputStream out) throws IOException {
+        List<IncomeInfo> list=getIncomeList(chargeVO);
+        List<Object[]> datas=new ArrayList<Object[]>();
+        for(IncomeInfo incomeInfo:list){
+            Object[] data=new Object[12];
+            data[0]=incomeInfo.getId();
+            data[1]=incomeInfo.getItemInfo().getName();
+            data[2]=incomeInfo.getOtherService()!=null?incomeInfo.getOtherService().getName():"";
+            data[3]=incomeInfo.getIncomePlatform().getName();
+            data[4]=incomeInfo.getIncomeType().getName();
+            data[5]=incomeInfo.getCustomType().getName();
+            data[6]=incomeInfo.getCustomMobile()!=null?incomeInfo.getCustomMobile():"";
+            data[7]=incomeInfo.getItemValue();
+            data[8]=incomeInfo.getItemCount();
+            data[9]=incomeInfo.getIncomeValue();
+            data[10]=Utils.datetoStr(incomeInfo.getOperateTime(),"yyyy-MM-dd hh:mm:ss");
+            data[11]=incomeInfo.getOperate().getRealName();
+            datas.add(data);
+        }
+        Utils.toExcel(excelTitles,datas,out);
+    }
     public void getPayExcel(ChargeVO chargeVO, OutputStream out) throws IOException {
         List<PayInfo> list=getPayList(chargeVO);
         List<Object[]> datas=new ArrayList<Object[]>();
