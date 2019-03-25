@@ -22,6 +22,8 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -38,7 +40,29 @@ public class CAService {
     private UserDao userDao;
     @Autowired
     private PayInfoDao payInfoDao;
+    private  String[] excelTitles={"编号","项目","附加服务","收款平台","结款类型","客户类型","客户手机号","单价","数量","金额","收款时间","收款员"};
 
+    public void getPayExcel(ChargeVO chargeVO, OutputStream out) throws IOException {
+        List<PayInfo> list=getPayList(chargeVO);
+        List<Object[]> datas=new ArrayList<Object[]>();
+        for(PayInfo payInfo:list){
+            Object[] data=new Object[12];
+            data[0]=payInfo.getId();
+            data[1]=payInfo.getItemInfo().getName();
+            data[2]=payInfo.getOtherService()!=null?payInfo.getOtherService().getName():"";
+            data[3]=payInfo.getIncomePlatform().getName();
+            data[4]=payInfo.getIncomeType().getName();
+            data[5]=payInfo.getCustomType().getName();
+            data[6]=payInfo.getCustomMobile()!=null?payInfo.getCustomMobile():"";
+            data[7]=payInfo.getItemValue();
+            data[8]=payInfo.getItemCount();
+            data[9]=payInfo.getIncomeValue();
+            data[10]=Utils.datetoStr(payInfo.getOperateTime(),"yyyy-MM-dd hh:mm:ss");
+            data[11]=payInfo.getOperate().getRealName();
+            datas.add(data);
+        }
+         Utils.toExcel(excelTitles,datas,out);
+    }
     public List<PayInfo> getPayList(ChargeVO chargeVO){
 
         List<PayInfo> result = payInfoDao.findAll(new Specification<PayInfo>() {
@@ -46,8 +70,8 @@ public class CAService {
             public Predicate toPredicate(Root<PayInfo> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
                 List<Predicate> list = new ArrayList<Predicate>();
                 list.add(cb.equal(root.get("status"),0));
-                list.add(cb.greaterThanOrEqualTo(root.get("operateTime"), Utils.StrToDate(chargeVO.getOperateTimeStartStr())));
-                list .add(cb.lessThanOrEqualTo(root.get("operateTime"), Utils.StrToDate(chargeVO.getGetOperateTimeEndStr())));
+                list.add(cb.greaterThanOrEqualTo(root.get("operateTime"), Utils.strToDate(chargeVO.getOperateTimeStartStr())));
+                list .add(cb.lessThanOrEqualTo(root.get("operateTime"), Utils.strToDate(chargeVO.getGetOperateTimeEndStr())));
                 if(null!=chargeVO.getItem()){
                     ItemInfo itemInfo=itemInfoDao.findById(chargeVO.getItem()).get();
                     list.add(cb.equal(root.get("itemInfo"),itemInfo));
@@ -75,8 +99,8 @@ public class CAService {
             public Predicate toPredicate(Root<IncomeInfo> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
                 List<Predicate> list = new ArrayList<Predicate>();
                 list.add(cb.equal(root.get("status"),0));
-                list.add(cb.greaterThanOrEqualTo(root.get("operateTime"), Utils.StrToDate(chargeVO.getOperateTimeStartStr())));
-                list .add(cb.lessThanOrEqualTo(root.get("operateTime"), Utils.StrToDate(chargeVO.getGetOperateTimeEndStr())));
+                list.add(cb.greaterThanOrEqualTo(root.get("operateTime"), Utils.strToDate(chargeVO.getOperateTimeStartStr())));
+                list .add(cb.lessThanOrEqualTo(root.get("operateTime"), Utils.strToDate(chargeVO.getGetOperateTimeEndStr())));
                 if(null!=chargeVO.getItem()){
                     ItemInfo itemInfo=itemInfoDao.findById(chargeVO.getItem()).get();
                     list.add(cb.equal(root.get("itemInfo"),itemInfo));

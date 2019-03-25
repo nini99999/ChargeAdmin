@@ -47,6 +47,20 @@
         {
             window.location.href="editPayInit?id="+value;
         }
+
+        function add(){
+            window.location.href="addPayInit";
+        }
+        function excel() {
+
+            $("#thisform").attr('action',"[[@{payExcel}]]");
+
+
+        }
+        function select() {
+            $("#thisform").attr('action',"[[@{payList}]]");
+
+        }
     </script>
 
 </head>
@@ -83,8 +97,9 @@
                 <div class="col-sm-1">
                     <input type="text" class="form-control" placeholder="客户手机号" id="customMobile" name="customMobile" th:value="${chargeVO.customMobile}">
                 </div>
-                <div class="col-sm-1">
-                    <button type="submit" class="btn btn-info pull-right">查询</button>
+                <div class="col-sm-2">
+                    <button onclick="select();" class="btn btn-info pull-right">查询</button>&nbsp;&nbsp;&nbsp;&nbsp;
+                    <button  class="btn btn-info pull-right" onclick="excel();">导出EXCEL</button>&nbsp;&nbsp;&nbsp;&nbsp;
                 </div>
             </form>
         </div>
@@ -195,9 +210,6 @@
 <!-- page script -->
 <script>
 
-    function add(){
-        window.location.href="addPayInit";
-    }
     $(function () {
         $('#payTable').DataTable({
             'paging'      : true,
