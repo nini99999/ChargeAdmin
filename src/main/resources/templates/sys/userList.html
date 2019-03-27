@@ -43,6 +43,10 @@
         {
             window.location.href="delIncome?id="+id;
         }
+        function add()
+        {
+            window.location.href="addUserInit";
+        }
         function editIncome(value )
         {
             window.location.href="editIncomeInit?id="+value;
@@ -84,7 +88,7 @@
                                     <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#modal-warning"  data-   th:onclick="'javascript:isDelIncome(\''+${id}+'\');'" >
                                         删除
                                     </button>
-                                    <button type="button" class="btn  btn-primary" th:onclick="'javascript:editIncome(\''+*{id}+'\');'">修改</button>
+
                                 </td>
                             </tr>
                             </tbody>

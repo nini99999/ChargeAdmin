@@ -14,8 +14,26 @@ public class User extends AbstractEntity {
     private String password;
     private String status;
     private String realName;
+    private String mobile;
+    private String email;
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<UserRole> userRoles;
+
+    public String getMobile() {
+        return mobile;
+    }
+
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
     public List<UserRole> getUserRoles() {
         return userRoles;
