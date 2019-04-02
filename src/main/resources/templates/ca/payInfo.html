@@ -143,6 +143,7 @@
 <script src="../bower_components/jquery/dist/jquery.min.js"></script>
 <!-- Bootstrap 3.3.7 -->
 <script src="../bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="../bower_components/bootstrap-validator/dist/js/bootstrapValidator.min.js"></script>
 <!-- SlimScroll -->
 <script src="../bower_components/jquery-slimscroll/jquery.slimscroll.min.js"></script>
 <!-- FastClick -->
@@ -164,6 +165,59 @@
     </script>
 <script>
     $(function () {
+        $('#thisform').bootstrapValidator({
+            message: 'This value is not valid',
+            feedbackIcons: {
+                valid: 'glyphicon glyphicon-ok',
+                invalid: 'glyphicon glyphicon-remove',
+                validating: 'glyphicon glyphicon-refresh'
+            },
+            fields: {
+                customMobile: {
+                    validators: {
+                        stringLength: {
+                            min: 11,
+                            max: 11,
+                            message: '请输入11位手机号码'
+                        },
+                        regexp: {
+                            regexp: /^1[3|5|8]{1}[0-9]{9}$/,
+                            message: '请输入正确的手机号码'
+                        }
+                    }
+                },
+                itemValue:{
+                    validators: {
+                        between: {    //长度限制
+                            min: 0,
+                            max: 999999,
+                            message: '非法数字'
+                        }
+                    },
+                },
+                itemCount:{
+                    validators: {
+                        between: {    //长度限制
+                            min: 0,
+                            max: 999999,
+                            message: '非法数字'
+                        }
+                    },
+                },
+                incomeValue:{
+                    validators: {
+                        between: {    //长度限制
+                            min: 0,
+                            max: 999999,
+                            message: '非法数字'
+                        }
+                    },
+                },
+            }
+        });
+        $('#submit').click(function() {
+            $('#thisform').bootstrapValidator('validate');
+        });
         $('#operateTime').datepicker({
             format: 'yyyy-mm-dd',
             autoclose: true
