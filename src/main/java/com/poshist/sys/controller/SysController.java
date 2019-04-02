@@ -3,6 +3,7 @@ package com.poshist.sys.controller;
 import com.poshist.sys.entity.Role;
 import com.poshist.sys.entity.User;
 import com.poshist.sys.service.UserService;
+import com.poshist.sys.vo.UserVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -44,5 +45,10 @@ public class SysController {
 
         model.addAttribute("roles",roles);
         return "sys/userInfo";
+    }
+    @RequestMapping("/addUser")
+    public String addUser(UserVO userVO ){
+
+        return "redirect:userList";
     }
 }

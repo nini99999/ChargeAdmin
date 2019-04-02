@@ -8,6 +8,7 @@ import com.poshist.sys.repository.UserDao;
 import com.poshist.sys.vo.UserVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,11 +24,16 @@ public class UserService {
     public UserDetails getUserByName(String userName){
         User user=userDao.findUserByUserNameAndStatus(userName, Constant.VALID);
         if(null!=user) {
-            UserVO userVO = new UserVO();
-            userVO.setUser(user);
-            return userVO;
+            return dtoToVo(user);
         }
         return null;
+    }
+    public UserDetails addUser(UserVO userVO){
+        User user=voToDto(userVO);
+        BCryptPasswordEncoder encode = new BCryptPasswordEncoder();
+        user.setPassword(encode.encode(userVO.getPassword()));
+
+        return  dtoToVo(user);
     }
     public List<User> getAllUser(){
         return userDao.findAll();
@@ -43,6 +49,26 @@ public class UserService {
             user.setStatus("0");
         }
         userDao.save(user);
+        return user;
+    }
+    private UserVO dtoToVo(User user){
+        UserVO userVO=new UserVO();
+        userVO.setId(user.getId());
+        userVO.setUserName(user.getUserName());
+        userVO.setPassword(user.getPassword());
+        userVO.setRealName(user.getRealName());
+        userVO.setMobile(user.getMobile());
+        userVO.setEmail(user.getEmail());
+        return userVO;
+    }
+    private User voToDto(UserVO userVO){
+        User user=new User();
+        user.setId(userVO.getId());
+        user.setUserName(userVO.getUserName());
+        user.setPassword(userVO.getPassword());
+        user.setRealName(userVO.getRealName());
+        user.setMobile(userVO.getMobile());
+        user.setEmail(userVO.getMobile());
         return user;
     }
 }

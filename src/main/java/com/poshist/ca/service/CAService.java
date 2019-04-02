@@ -225,7 +225,7 @@ public class CAService {
         payInfo.setCreateTime(new Date());
         payInfo.setStatus(0);
         UserVO principal = (UserVO) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        payInfo.setOperate(userDao.findById(principal.getUser().getId()).get());
+        payInfo.setOperate(userDao.findById(principal.getId()).get());
         payInfoDao.save(payInfo);
         return payInfo;
     }
@@ -236,7 +236,7 @@ public class CAService {
         incomeInfo.setCreateTime(new Date());
         incomeInfo.setStatus(0);
         UserVO principal = (UserVO) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        incomeInfo.setOperate(userDao.findById(principal.getUser().getId()).get());
+        incomeInfo.setOperate(userDao.findById(principal.getId()).get());
         incomeInfoDao.save(incomeInfo);
 
         return incomeInfo;
