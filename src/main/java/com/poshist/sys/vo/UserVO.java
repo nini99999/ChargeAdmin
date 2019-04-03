@@ -4,6 +4,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
+import java.util.List;
 
 public class UserVO implements UserDetails {
     private String mobile;
@@ -12,6 +13,24 @@ public class UserVO implements UserDetails {
     private String userName;
     private String realName;
     private Long id;
+    private Long roleId;
+    private List<FunctionVO> functions;
+
+    public List<FunctionVO> getFunctions() {
+        return functions;
+    }
+
+    public void setFunctions(List<FunctionVO> functions) {
+        this.functions = functions;
+    }
+
+    public Long getRoleId() {
+        return roleId;
+    }
+
+    public void setRoleId(Long roleId) {
+        this.roleId = roleId;
+    }
 
     public Long getId() {
         return id;

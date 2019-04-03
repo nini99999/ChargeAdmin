@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -301,7 +301,7 @@
                   <a href="#" class="btn btn-default btn-flat">Profile</a>
                 </div>
                 <div class="pull-right">
-                  <a href="#" class="btn btn-default btn-flat">Sign out</a>
+                  <a href="logout" class="btn btn-default btn-flat">Sign out</a>
                 </div>
               </li>
             </ul>
@@ -344,42 +344,16 @@
       <!-- sidebar menu: : style can be found in sidebar.less -->
       <ul class="sidebar-menu" data-widget="tree">
         <li class="header">主菜单</li>
-        <li class="treeview">
+        <li th:each="parent:${session.SPRING_SECURITY_CONTEXT.authentication.principal.functions}" th:object="${parent}" class="treeview">
           <a href="#">
-            <i class="fa fa-pie-chart"></i>
-            <span>报表</span>
+            <i th:class="*{memo}"></i>
+            <span>[[*{name}]]</span>
             <span class="pull-right-container">
               <i class="fa fa-angle-left pull-right"></i>
             </span>
           </a>
           <ul class="treeview-menu">
-            <li><a href="#"><i class="fa fa-circle-o"></i> 待定</a></li>
-          </ul>
-        </li>
-        <li class="treeview">
-          <a href="#">
-            <i class="fa fa-laptop"></i>
-            <span>系统设置</span>
-            <span class="pull-right-container">
-              <i class="fa fa-angle-left pull-right"></i>
-            </span>
-          </a>
-          <ul class="treeview-menu">
-            <li><a href=""><i class="fa fa-circle-o"></i> 项目参数</a></li>
-            <li><a href=""><i class="fa fa-circle-o"></i> 其他参数</a></li>
-            <li><a href="sys/userList"  target="menuFrame"><i class="fa fa-circle-o"></i> 用户管理</a></li>
-          </ul>
-        </li>
-        <li class="treeview">
-          <a href="#">
-            <i class="fa fa-edit"></i> <span>录入</span>
-            <span class="pull-right-container">
-              <i class="fa fa-angle-left pull-right"></i>
-            </span>
-          </a>
-          <ul class="treeview-menu">
-            <li><a href="ca/incomeList" target="menuFrame"><i class="fa fa-circle-o"></i> 收入</a></li>
-            <li><a href="ca/payList" target="menuFrame"><i class="fa fa-circle-o"></i>支出</a></li>
+            <li th:each="child:*{childFunction}" th:object="${child}"><a th:href="*{url}"  target="menuFrame"><i class="fa fa-circle-o"></i>[[*{name}]]</a></li>
           </ul>
         </li>
       </ul>
@@ -613,8 +587,7 @@
 <script src="bower_components/jquery-slimscroll/jquery.slimscroll.min.js"></script>
 <!-- ChartJS -->
 <script src="bower_components/chart.js/Chart.js"></script>
-<!-- AdminLTE dashboard demo (This is only for demo purposes) -->
-<script src="dist/js/pages/dashboard2.js"></script>
+
 <!-- AdminLTE for demo purposes -->
 <script src="dist/js/demo.js"></script>
 </body>

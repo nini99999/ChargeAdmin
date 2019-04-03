@@ -48,7 +48,7 @@ public class SysController {
     }
     @RequestMapping("/addUser")
     public String addUser(UserVO userVO ){
-
+        userService.addUser(userVO);
         return "redirect:userList";
     }
 }

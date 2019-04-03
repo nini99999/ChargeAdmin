@@ -164,8 +164,8 @@
                             message: '真实姓名不能为空'
                         },
                         stringLength: {    //长度限制
-                            min: 6,
-                            max: 30,
+                            min: 2,
+                            max: 8,
                             message: '真实姓名长度必须在6到30之间'
                         },
                     }
@@ -215,29 +215,8 @@
                 }
             }
         });
-        $('#submit').click(function() {
-            $('#thisform').bootstrapValidator('validate');
-        });
-
-        $('#operateTime').datepicker({
-            format: 'yyyy-mm-dd',
-            autoclose: true
-        });
-        if(""!=$('#payID').val()){
-            $("#thisform").attr('action',"[[@{savePay}]]");
-        }
     })
-    function changeItem(){
-        $("#itemValue").val(itemMap.get($("#item").val()));
-        if(!isNaN($("#itemCount").val())){
-            $("#incomeValue").val(( $("#itemValue").val()*$("#itemCount").val()).toFixed(2)) ;
-        }
-    }
-    function changeItemValue(){
-        if(!isNaN($("#itemCount").val())&&!isNaN($("#itemValue").val())){
-            $("#incomeValue").val(( $("#itemValue").val()*$("#itemCount").val()).toFixed(2)) ;
-        }
-    }
+
 </script>
 </body>
 </html>

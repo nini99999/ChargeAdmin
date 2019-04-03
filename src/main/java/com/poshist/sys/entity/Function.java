@@ -3,9 +3,7 @@ package com.poshist.sys.entity;
 import com.poshist.common.AbstractEntity;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import javax.persistence.Entity;
-import javax.persistence.EntityListeners;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "T_SYS_FUNCTION")
@@ -16,6 +14,17 @@ public class Function extends AbstractEntity {
     private String url;
     private String memo;
     private String status;
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "parent_id",referencedColumnName = "id")
+    private Function parentFunction;
+
+    public Function getParentFunction() {
+        return parentFunction;
+    }
+
+    public void setParentFunction(Function parentFunction) {
+        this.parentFunction = parentFunction;
+    }
 
     public String getName() {
         return name;
