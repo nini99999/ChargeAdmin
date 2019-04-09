@@ -66,7 +66,7 @@
                 </div>
             </div>
             <div class="form-group">
-                <label for="roleId" class="col-sm-2 control-label">角色</label>
+                <label for="roleId" class="col-sm-2 control-label">角色*</label>
 
                 <div class="col-sm-10">
                     <select class="form-control" id="roleId" name="roleId">
@@ -89,7 +89,7 @@
             </div>
         </div>
         <div class="box-footer">
-            <button type="submit" class="btn btn-info pull-right" id="submit">提交</button>
+            <button type="submit" class="btn btn-info pull-right">提交</button>
         </div>
         <!-- /.box-footer -->
     </div>
@@ -112,18 +112,9 @@
 <!-- bootstrap datepicker -->
 <script src="../bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
 <!-- page script -->
-    <script  th:inline="javascript">
-
-        var itemMap = new Map();
-        [# th:each="item : ${itemInfo}"]
-        itemMap.set('[(${item.value})]','[(${item.memo})]');
-        [/]
-
-    </script>
 <script>
     $(function () {
         $('#thisform').bootstrapValidator({
-            message: 'This value is not valid',
             feedbackIcons: {
                 valid: 'glyphicon glyphicon-ok',
                 invalid: 'glyphicon glyphicon-remove',
@@ -218,5 +209,6 @@
     })
 
 </script>
+</div>
 </body>
 </html>
