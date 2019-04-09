@@ -35,22 +35,19 @@
           href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
     <script>
         var id;
-        function  isDelIncome(value)
+        function  isDelUser(value)
         {
             id=value;
         }
-        function delIncome()
+        function delUser()
         {
-            window.location.href="delIncome?id="+id;
+            window.location.href="changeUserStatus?id="+id;
         }
         function add()
         {
             window.location.href="addUserInit";
         }
-        function editIncome(value )
-        {
-            window.location.href="editIncomeInit?id="+value;
-        }
+
     </script>
 
 </head>
@@ -85,7 +82,7 @@
                                 <td th:if="*{status eq '0'} " th:text="有效"></td>  <td th:if="*{status   ne '0'}" th:text="无效" ></td>
 
                                 <td >
-                                    <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#modal-warning"  data-   th:onclick="'javascript:isDelIncome(\''+${id}+'\');'" >
+                                    <button th:if="*{status eq '0'} " type="button" class="btn btn-warning" data-toggle="modal" data-target="#modal-warning"  data-   th:onclick="'javascript:isDelUser(\''+*{id}+'\');'" >
                                         删除
                                     </button>
 
@@ -116,7 +113,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">关闭</button>
-                    <button type="button" class="btn btn-outline" data-dismiss="modal" onclick="delIncome();">确认</button>
+                    <button type="button" class="btn btn-outline" data-dismiss="modal" onclick="delUser();">确认</button>
                 </div>
             </div>
             <!-- /.modal-content -->

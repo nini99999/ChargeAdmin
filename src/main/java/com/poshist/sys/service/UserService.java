@@ -25,6 +25,7 @@ public class UserService {
     private UserDao userDao;
     @Autowired
     private RoleDao roleDao;
+
     public UserDetails getUserByName(String userName){
         User user=userDao.findUserByUserNameAndStatus(userName, Constant.VALID);
         if(null!=user) {

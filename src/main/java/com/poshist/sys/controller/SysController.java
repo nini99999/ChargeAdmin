@@ -24,6 +24,7 @@ public class SysController {
         model.addAttribute("userList",userList);
         return "sys/userList";
     }
+
     @RequestMapping("/getUserByName")
     @ResponseBody
     public String getUserByName(String userName){
