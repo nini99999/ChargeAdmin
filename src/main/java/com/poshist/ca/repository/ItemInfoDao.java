@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface ItemInfoDao extends CrudRepository<ItemInfo, Long> {
 public List<ItemInfo>getAllByIdAndStatus(Long id,Integer status);
+
 }

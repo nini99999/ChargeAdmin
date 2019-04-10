@@ -9,7 +9,6 @@ import com.poshist.ca.repository.IncomeInfoDao;
 import com.poshist.ca.repository.ItemInfoDao;
 import com.poshist.ca.repository.PayInfoDao;
 import com.poshist.ca.vo.ChargeVO;
-import com.poshist.ca.vo.SelectVO;
 import com.poshist.common.Utils;
 import com.poshist.sys.repository.UserDao;
 import com.poshist.sys.vo.UserVO;
@@ -43,7 +42,7 @@ public class CAService {
     private  String[] excelTitles={"编号","项目","附加服务","收款平台","结款类型","客户类型","客户手机号","单价","数量","金额","收款时间","收款员"};
     public void getIncomeExcel(ChargeVO chargeVO, OutputStream out) throws IOException {
         List<IncomeInfo> list=getIncomeList(chargeVO);
-        List<Object[]> datas=new ArrayList<Object[]>();
+        List<Object[]> datas=new ArrayList<>();
         for(IncomeInfo incomeInfo:list){
             Object[] data=new Object[12];
             data[0]=incomeInfo.getId();
@@ -150,11 +149,7 @@ public class CAService {
     public List<DictionaryInfo> getDictionaryInfoListByType(String type ){
         return dictionaryInfoDao.getAllByStatusAndTypeOrderById(0,type);
     }
-    public List<SelectVO>getItemInfo(Long type){
-     List<ItemInfo> itemList=itemInfoDao.getAllByIdAndStatus(type,0);
 
-     return analysisItem(itemList);
-    }
     public ChargeVO getPayInfo(Long id){
         PayInfo payInfo= payInfoDao.findById(id).get();
         ChargeVO chargeVO=new ChargeVO();
@@ -192,32 +187,7 @@ public class CAService {
         chargeVO.setId(incomeInfo.getId());
         return chargeVO;
     }
-    private List<SelectVO> analysisItem(List<ItemInfo> itemList){
-         List<SelectVO> list=new ArrayList<SelectVO>();
-        if(null==itemList||itemList.isEmpty()){
-            return list;
-        }
-        for(ItemInfo itemInfo:itemList.get(0).getChildrenInfo()){
-            if(itemInfo.getStatus()==0) {
-                SelectVO vo = new SelectVO();
-                vo.setName(itemInfo.getName());
-                vo.setValue(itemInfo.getId());
-                vo.setMemo(itemInfo.getItemValue().toString());
-                list.add(vo);
-                for (ItemInfo chilren : itemInfo.getChildrenInfo()) {
-                    if(chilren.getStatus()==0) {
-                        vo = new SelectVO();
-                        vo.setName("----" + chilren.getName());
-                        vo.setValue(chilren.getId());
-                        vo.setMemo(chilren.getItemValue().toString());
-                        list.add(vo);
-                    }
-                }
-            }
-        }
-        return list;
 
-    }
 
     public PayInfo addPayInfo(ChargeVO chargeVO){
         PayInfo payInfo=new PayInfo();

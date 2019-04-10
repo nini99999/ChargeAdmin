@@ -47,12 +47,8 @@
         {
             window.location.href="editIncomeInit?id="+value;
         }
-        function excel() {
-            $("#thisform").attr('action',"[[@{incomeExcel}]]");
-        }
-        function select() {
-            $("#thisform").attr('action',"[[@{incomeList}]]");
-
+        function add(){
+            window.location.href="addItemInit?parentId=[[${itemInfo.id}]]";
         }
     </script>
 
@@ -60,88 +56,38 @@
 <body class="hold-transition skin-blue sidebar-mini">
     <!-- Main content -->
     <section class="content">
-        <div class="row">
-            <form  class="form-horizontal" th:action="@{incomeList}" method="post" id="thisform">
-                <label class="col-sm-1 control-label">付款时间：</label>
-                <div class="col-sm-2" >
-                    <div class="input-group">
-                        <div class="input-group-addon">
-                            <i class="fa fa-calendar"></i>
-                        </div>
-                        <input type="text" class="form-control pull-right" id="operateTime" name="operateTimeStr"  >
-                    </div>
-                </div>
-                <label class="col-sm-1 control-label">项目：</label>
-                <div class="col-sm-1">
-                    <select class="form-control" id="item" name="item"  >
-                        <option value="" >无限制</option>
-                        <option th:each="itemInfo:${itemInfo}" th:value="${itemInfo.value}" th:text="${itemInfo.name}" th:selected="${itemInfo.value==chargeVO.item}"></option>
-                    </select>
-                </div>
-                <label class="col-sm-1 control-label">结款类型：</label>
-                <div class="col-sm-1">
-                    <select class="form-control" id="incomeType" name="incomeType">
-                        <option value="">无限制</option>
-                        <option th:each="incomeType:${incomeType}" th:value="${incomeType.id}" th:text="${incomeType.name}" th:selected="${incomeType.id==chargeVO.incomeType}"></option>
-                    </select>
-                </div>
-                <label class="col-sm-1 control-label">客户手机号：</label>
-                <div class="col-sm-1">
-                    <input type="text" class="form-control" placeholder="客户手机号" id="customMobile" name="customMobile" th:value="${chargeVO.customMobile}">
-                </div>
-                <div class="col-sm-2">
-                    <button onclick="select();" class="btn btn-info pull-right">查询</button>&nbsp;&nbsp;&nbsp;&nbsp;
-                    <button  class="btn btn-info pull-right" onclick="excel();">导出EXCEL</button>&nbsp;&nbsp;&nbsp;&nbsp;
-                </div>
-            </form>
-        </div>
+
         <div class="row">
             <div class="col-xs-12">
                 <div class="box">
                     <div class="box-header">
                         <div class="col-md-1" align="middle">
-                            <button type="button" class="btn btn-block btn-default " onclick="add();">新增收入</button>
+                            <button type="button" class="btn btn-block btn-default " onclick="add();">新增项目</button>
                         </div>
                     </div>
                     <!-- /.box-header -->
                     <div class="box-body">
-                        <table id="incomeTable" class="table table-bordered table-hover">
+                        <table id="itemTable" class="table table-bordered table-hover">
                             <thead>
                             <tr>
                                 <th  rowspan="1" colspan="1" >编号</th>
-                                <th  rowspan="1" colspan="1" >项目</th>
-                                <th  rowspan="1" colspan="1" >附加服务</th>
-                                <th  rowspan="1" colspan="1" >收款平台</th>
-                                <th  rowspan="1" colspan="1" >结款类型</th>
-                                <th  rowspan="1" colspan="1">客户类型</th>
-                                <th  rowspan="1" colspan="1">客户手机号</th>
-                                <th  rowspan="1" colspan="1">单价</th>
-                                <th  rowspan="1" colspan="1">数量</th>
-                                <th  rowspan="1" colspan="1">金额</th>
-                                <th  rowspan="1" colspan="1">收款时间</th>
-                                <th  rowspan="1" colspan="1">收款员</th>
+                                <th  rowspan="1" colspan="1" >名称</th>
+                                <th  rowspan="1" colspan="1" >单价</th>
+                                <th  rowspan="1" colspan="1" >上级名称</th>
                                 <th rowspan="1" colspan="1">操作</th>
                             </tr>
                             </thead>
                             <tbody>
-                            <tr th:each="income:${incomeList}">
-                                <td th:text="${income.id}"></td>
-                                <td th:text="${income.itemInfo.name}"></td>
-                                <td th:if="${income.otherService!=null}" th:text="${income.otherService.name}"></td>  <td th:if="${income.otherService==null}" ></td>
-                                <td th:text="${income.incomePlatform.name}"></td>
-                                <td th:text="${income.incomeType.name}"></td>
-                                <td th:text="${income.customType.name}"></td>
-                                <td th:text="${income.customMobile}"></td>
-                                <td th:text="${income.itemValue}"></td>
-                                <td th:text="${income.itemCount}"></td>
-                                <td th:text="${income.incomeValue}"></td>
-                                <td th:text="${#dates.format(income.operateTime, 'yyyy-MM-dd')}"></td>
-                                <td th:text="${income.operate.realName}"></td>
+                            <tr th:each="item:${itemInfos}" th:object="${item}">
+                                <td th:text="*{id}"></td>
+                                <td th:text="*{name}"></td>
+                                <td th:text="*{itemValue}"></td>
+                                <td th:text="${itemInfo.name}"></td>
                                 <td >
-                                    <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#modal-warning"  data-   th:onclick="'javascript:isDelIncome(\''+${income.id}+'\');'" >
+                                    <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#modal-warning"  data-   th:onclick="'javascript:isDelIncome(\''+*{id}+'\');'" >
                                         删除
                                     </button>
-                                    <button type="button" class="btn  btn-primary" th:onclick="'javascript:editIncome(\''+${income.id}+'\');'">修改</button>
+                                    <button type="button" class="btn  btn-primary" th:onclick="'javascript:editIncome(\''+*{id}+'\');'">修改</button>
                                 </td>
                             </tr>
                             </tbody>
@@ -201,25 +147,15 @@
 <!-- page script -->
 <script>
 
-    function add(){
-        window.location.href="addIncomeInit";
-    }
+
     $(function () {
-        $('#incomeTable').DataTable({
+        $('#itemTable').DataTable({
             'paging'      : true,
             'lengthChange': false,
             'searching'   : false,
             'ordering'    : false,
             'info'        : true,
             'autoWidth'   : false,
-        })
-        //Date range picker
-        $('#operateTime').daterangepicker({
-            locale: {
-                format: 'YYYY-MM-DD'
-            },
-            startDate:'[(${chargeVO.operateTimeStartStr})]',
-            endDate: '[(${chargeVO.getOperateTimeEndStr})]'
         })
     })
 
