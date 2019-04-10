@@ -19,7 +19,7 @@ public class ItemService {
         Optional<ItemInfo> itemInfoOptional=itemInfoDao.findById(id);
         if(itemInfoOptional.isPresent()){
             ItemInfo itemInfo=itemInfoOptional.get();
-            itemInfo.setStatus(0);
+            itemInfo.setStatus(1);
             itemInfoDao.save(itemInfo);
             return new ItemVO(itemInfo);
         }
