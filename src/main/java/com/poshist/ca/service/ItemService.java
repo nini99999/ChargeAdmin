@@ -15,6 +15,14 @@ import java.util.Optional;
 public class ItemService {
     @Autowired
     private ItemInfoDao itemInfoDao;
+    public ItemVO saveItem(ItemVO itemVO){
+        Optional<ItemInfo> itemInfoOptional=itemInfoDao.findById(itemVO.getId());
+        if(itemInfoOptional.isPresent()){
+         ItemInfo itemInfo=itemVO.toItemInfo(itemInfoOptional.get());
+         itemInfoDao.save(itemInfo);
+        }
+       return itemVO;
+    }
     public ItemVO delItem(Long id){
         Optional<ItemInfo> itemInfoOptional=itemInfoDao.findById(id);
         if(itemInfoOptional.isPresent()){
@@ -37,7 +45,7 @@ public class ItemService {
         return itemVOs;
     }
     public ItemVO addItem(ItemVO itemVO){
-         ItemInfo itemInfo=itemVO.toItemInfo();
+         ItemInfo itemInfo=itemVO.toItemInfo(new ItemInfo());
          itemInfo.setStatus(0);
         Optional<ItemInfo> getItemInfo=itemInfoDao.findById(itemVO.getParentId());
         if(getItemInfo.isPresent()){

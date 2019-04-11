@@ -47,5 +47,17 @@ public class ItemController {
        ItemVO itemVO= itemService.delItem(id);
         return "redirect:itemList?parentId="+itemVO.getParentId();
     }
-
+    @RequestMapping("/editItemInit")
+    public String editItemInit (Long id, Model model){
+        ItemVO itemInfo=itemService.getItemInfo(id);
+        ItemVO parent=itemService.getItemInfo(itemInfo.getParentId());
+        model.addAttribute("parent",parent);
+        model.addAttribute("itemInfo",itemInfo);
+        return "item/itemInfo";
+    }
+    @RequestMapping("/editItem")
+    public String editItem (ItemVO itemVO){
+        itemService.saveItem(itemVO);
+        return "redirect:itemList?parentId="+itemVO.getParentId();
+    }
 }

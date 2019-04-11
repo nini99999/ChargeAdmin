@@ -17,8 +17,7 @@ public class ItemVO {
         this.itemValue=itemInfo.getItemValue();
 
     }
-   public ItemInfo toItemInfo(){
-        ItemInfo itemInfo=new ItemInfo();
+   public ItemInfo toItemInfo(ItemInfo itemInfo){
         itemInfo.setId(this.id);
         itemInfo.setName(this.name);
         itemInfo.setItemValue(this.itemValue);
