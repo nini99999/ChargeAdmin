@@ -78,7 +78,11 @@ public class ItemService {
                 SelectVO vo = new SelectVO();
                 vo.setName(itemInfo.getName());
                 vo.setValue(itemInfo.getId());
-                vo.setMemo(itemInfo.getItemValue().toString());
+                if(null!=itemInfo.getItemValue()) {
+                    vo.setMemo(itemInfo.getItemValue().toString());
+                }else{
+                    vo.setMemo("0");
+                }
                 list.add(vo);
                 for (ItemInfo chilren : itemInfo.getChildrenInfo()) {
                     if(chilren.getStatus()==0) {
