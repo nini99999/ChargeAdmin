@@ -10,6 +10,7 @@ import com.poshist.sys.repository.UserDao;
 import com.poshist.sys.vo.FunctionVO;
 import com.poshist.sys.vo.UserVO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -17,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -25,7 +27,26 @@ public class UserService {
     private UserDao userDao;
     @Autowired
     private RoleDao roleDao;
-
+    public boolean isPassword(String password){
+        UserVO userVO = (UserVO) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Optional<User> optionalUser= userDao.findById(userVO.getId());
+       if(optionalUser.isPresent()){
+           User user=optionalUser.get();
+           BCryptPasswordEncoder encode = new BCryptPasswordEncoder();
+         return  encode.matches(password,user.getPassword());
+       }
+       return false;
+    }
+    public void changePassword(String password){
+        UserVO userVO = (UserVO) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Optional<User> optionalUser= userDao.findById(userVO.getId());
+        if(optionalUser.isPresent()){
+            User user=optionalUser.get();
+            BCryptPasswordEncoder encode = new BCryptPasswordEncoder();
+            user.setPassword(encode.encode(password));
+            userDao.save(user);
+        }
+    }
     public UserDetails getUserByName(String userName){
         User user=userDao.findUserByUserNameAndStatus(userName, Constant.VALID);
         if(null!=user) {

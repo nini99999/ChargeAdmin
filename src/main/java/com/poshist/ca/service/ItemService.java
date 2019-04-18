@@ -65,7 +65,6 @@ public class ItemService {
 
     public List<SelectVO> getItemInfoSelect(Long type){
         List<ItemInfo> itemList=itemInfoDao.getAllByIdAndStatus(type,0);
-
         return analysisItem(itemList);
     }
     private List<SelectVO> analysisItem(List<ItemInfo> itemList){
@@ -96,6 +95,5 @@ public class ItemService {
             }
         }
         return list;
-
     }
 }

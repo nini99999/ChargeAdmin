@@ -35,6 +35,23 @@ public class SysController {
         return "{\"valid\":false}";
 
     }
+    @RequestMapping("/isPassword")
+    @ResponseBody
+    public String isPassword(String oldPassword){
+        if(userService.isPassword(oldPassword)){
+            return "{\"valid\":true}";
+        }
+        return "{\"valid\":false}";
+    }
+    @RequestMapping("/changePasswordInit")
+    public String changePasswordInit(){
+        return "sys/changePassword";
+    }
+    @RequestMapping("/changePassword")
+    public String changePassword(String password){
+        userService.changePassword(password);
+        return "sys/changePassword";
+    }
     @RequestMapping("/changeUserStatus")
     public String changeUserStatus(Long id){
         userService.changeUserStatus(id);

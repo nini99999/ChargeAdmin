@@ -141,14 +141,6 @@ public class CAService {
         });
         return result;
     }
-    /**
-     *  获取字典表
-     * @param type
-     * @return
-     */
-    public List<DictionaryInfo> getDictionaryInfoListByType(String type ){
-        return dictionaryInfoDao.getAllByStatusAndTypeOrderById(0,type);
-    }
 
     public ChargeVO getPayInfo(Long id){
         PayInfo payInfo= payInfoDao.findById(id).get();

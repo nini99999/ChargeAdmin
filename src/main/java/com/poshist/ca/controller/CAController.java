@@ -3,6 +3,7 @@ package com.poshist.ca.controller;
 import com.poshist.ca.entity.IncomeInfo;
 import com.poshist.ca.entity.PayInfo;
 import com.poshist.ca.service.CAService;
+import com.poshist.ca.service.DictionaryService;
 import com.poshist.ca.service.ItemService;
 import com.poshist.ca.vo.ChargeVO;
 import com.poshist.common.Constant;
@@ -27,6 +28,8 @@ public class CAController {
     private CAService caService;
     @Autowired
     private ItemService itemService;
+    @Autowired
+    private DictionaryService dictionaryService;
     @RequestMapping("/payExcel")
     public void payExcel(ChargeVO chargeVO, HttpServletResponse response) throws IOException {
 
@@ -58,7 +61,7 @@ public class CAController {
             chargeVO.init();
         }
         List<PayInfo> list = caService.getPayList(chargeVO);
-        List incomeType = caService.getDictionaryInfoListByType(Constant.INCOMETYPE);
+        List incomeType = dictionaryService.getDictionaryInfoListByType(Constant.INCOMETYPE);
         List itemInfo = itemService.getItemInfoSelect(Constant.TYPEBUY);
         model.addAttribute("incomeType", incomeType);
         model.addAttribute("itemInfo", itemInfo);
@@ -75,7 +78,7 @@ public class CAController {
             chargeVO.init();
         }
         List<IncomeInfo> list = caService.getIncomeList(chargeVO);
-        List incomeType = caService.getDictionaryInfoListByType(Constant.INCOMETYPE);
+        List incomeType = dictionaryService.getDictionaryInfoListByType(Constant.INCOMETYPE);
         List itemInfo = itemService.getItemInfoSelect(Constant.TYPEINCOME);
         model.addAttribute("incomeType", incomeType);
         model.addAttribute("itemInfo", itemInfo);
@@ -89,10 +92,10 @@ public class CAController {
 
     @RequestMapping("/addPayInit")
     public String addPayInit(@ModelAttribute(value = "chargeVO") ChargeVO chargeVO, Model model) {
-        List payType = caService.getDictionaryInfoListByType(Constant.INCOMETYPE);
-        List payPlatform = caService.getDictionaryInfoListByType(Constant.INCOMEPLATFORM);
-        List otherService = caService.getDictionaryInfoListByType(Constant.OTHERSERVICE);
-        List customType = caService.getDictionaryInfoListByType(Constant.CUSTOMTYPE);
+        List payType = dictionaryService.getDictionaryInfoListByType(Constant.INCOMETYPE);
+        List payPlatform = dictionaryService.getDictionaryInfoListByType(Constant.INCOMEPLATFORM);
+        List otherService = dictionaryService.getDictionaryInfoListByType(Constant.OTHERSERVICE);
+        List customType = dictionaryService.getDictionaryInfoListByType(Constant.CUSTOMTYPE);
         List itemInfo = itemService.getItemInfoSelect(Constant.TYPEBUY);
         model.addAttribute("payType", payType);
         model.addAttribute("payPlatform", payPlatform);
@@ -109,10 +112,10 @@ public class CAController {
 
     @RequestMapping("/addIncomeInit")
     public String addIncomeInit(@ModelAttribute(value = "chargeVO") ChargeVO chargeVO, Model model) {
-        List incomeType = caService.getDictionaryInfoListByType(Constant.INCOMETYPE);
-        List incomePlatform = caService.getDictionaryInfoListByType(Constant.INCOMEPLATFORM);
-        List otherService = caService.getDictionaryInfoListByType(Constant.OTHERSERVICE);
-        List customType = caService.getDictionaryInfoListByType(Constant.CUSTOMTYPE);
+        List incomeType = dictionaryService.getDictionaryInfoListByType(Constant.INCOMETYPE);
+        List incomePlatform = dictionaryService.getDictionaryInfoListByType(Constant.INCOMEPLATFORM);
+        List otherService = dictionaryService.getDictionaryInfoListByType(Constant.OTHERSERVICE);
+        List customType = dictionaryService.getDictionaryInfoListByType(Constant.CUSTOMTYPE);
         List itemInfo = itemService.getItemInfoSelect(Constant.TYPEINCOME);
         model.addAttribute("incomeType", incomeType);
         model.addAttribute("incomePlatform", incomePlatform);
